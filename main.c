@@ -1,8 +1,8 @@
-#include <stdio.h>
+
 #include "GameCore.h"
-#include <SDL2/SDL.h>
+#include "MapRenderer.h"
 #include <direct.h>
-#include <SDL2/SDL_image.h>
+
 
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
@@ -23,7 +23,9 @@ void animate(Entity *entity, int state){
 
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,800,800,SDL_WINDOW_OPENGL);
+    GameData gameData;
+    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,640,640,SDL_WINDOW_OPENGL);
+    SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
     if (!win){
         SDL_Quit();
         return 1;
@@ -54,6 +56,17 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return 4;
     }
+    surface = IMG_Load("bk.png");
+    SDL_Texture *text = SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+    if(!text){
+        SDL_Log("error %s\n",SDL_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 4;
+    }
+
 
     int running=1;
     SDL_Event event;
@@ -81,24 +94,25 @@ int main(int argc, char **argv) {
             }
         }
         const Uint8 *state = SDL_GetKeyboardState(NULL);
-        if(state[SDL_SCANCODE_UP]) {
+        if(state[SDL_SCANCODE_UP]||state[SDL_SCANCODE_W]) {
             states=4;
             player.sprite.y -= 1;
         }
-        else if(state[SDL_SCANCODE_DOWN]){
+        else if(state[SDL_SCANCODE_DOWN]||state[SDL_SCANCODE_S]){
             states=3;
             player.sprite.y+=1;
         }
-        else if(state[SDL_SCANCODE_LEFT]) {
+        else if(state[SDL_SCANCODE_LEFT]||state[SDL_SCANCODE_A]) {
             states=1;
             player.sprite.x -= 1;
         }
-        else if(state[SDL_SCANCODE_RIGHT]) {
+        else if(state[SDL_SCANCODE_RIGHT]||state[SDL_SCANCODE_D]) {
             states=2;
             player.sprite.x += 1;
         }
 
         SDL_RenderClear(rend);
+        rendermap(rend,&gameData);
         SDL_RenderCopy(rend,player.spriteSheet,&player.cutter,&player.sprite);
         SDL_RenderPresent(rend);
         animate(&player,states);
