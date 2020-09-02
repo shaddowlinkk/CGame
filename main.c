@@ -56,17 +56,6 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return 4;
     }
-    surface = IMG_Load("bk.png");
-    SDL_Texture *text = SDL_CreateTextureFromSurface(rend,surface);
-    SDL_FreeSurface(surface);
-    if(!text){
-        SDL_Log("error %s\n",SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 4;
-    }
-
 
     int running=1;
     SDL_Event event;
