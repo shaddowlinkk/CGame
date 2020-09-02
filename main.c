@@ -4,6 +4,23 @@
 #include <direct.h>
 #include <SDL2/SDL_image.h>
 
+/**
+ * This function moves the cutting SDL_Rect to the next frame of the animation
+ * @param entity what ever entity you are trying to animate.
+ * @param state the animation state that corresponds to the action you are trying to animate
+ */
+void animate(Entity *entity, int state){
+    //count slows the animation todo need to remove that and make it native to the rendering loop
+    static int count =0;
+    if(count==5) {
+        count=0;
+        entity->cutter.y = (entity->cutter.h*state);
+        entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)) );
+    }
+    count++;
+}
+
+
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,800,800,SDL_WINDOW_OPENGL);
@@ -46,49 +63,45 @@ int main(int argc, char **argv) {
     player.sprite.w=16;
     player.sprite.x=0;
     player.sprite.y=0;
+    player.animationStates[0]=7;
+    player.animationStates[1]=11;
+    player.animationStates[2]=11;
+    player.animationStates[3]=8;
+    player.animationStates[4]=9;
+    player.animationStates[5]=16;
     player.cutter=player.sprite;
     SDL_RenderClear(rend);
+
     while(running) {
+        int states=0;
         // Process events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = 0;
             }
-            if(event.type == SDL_KEYUP){
-                switch (event.key.keysym.scancode) {
-                    case SDL_SCANCODE_UP:
-                        player.cutter.y=(32*4);
-                        player.sprite.y-=10;
-                        break;
-                    case SDL_SCANCODE_DOWN:
-                        player.cutter.y=0;
-                        player.sprite.y+=10;
-                        break;
-                    case SDL_SCANCODE_LEFT:
-                        player.cutter.y=(32*1);
-                        player.sprite.x-=10;
-                        break;
-                    case SDL_SCANCODE_RIGHT:
-                        player.cutter.y=(32*2);
-                        player.sprite.x+=10;
-                        break;
-                    case SDL_SCANCODE_F1:
-                        SDL_RenderPresent(rend);
-                        break;
-                    case SDL_SCANCODE_F3:
-                        SDL_RenderClear(rend);
-                        break;
-                    case SDL_SCANCODE_F2:
-                        player.cutter.x=0;
-                        player.cutter.y=(32*4);
-
-                        break;
-                }
-            }
         }
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        if(state[SDL_SCANCODE_UP]) {
+            states=4;
+            player.sprite.y -= 1;
+        }
+        else if(state[SDL_SCANCODE_DOWN]){
+            states=3;
+            player.sprite.y+=1;
+        }
+        else if(state[SDL_SCANCODE_LEFT]) {
+            states=1;
+            player.sprite.x -= 1;
+        }
+        else if(state[SDL_SCANCODE_RIGHT]) {
+            states=2;
+            player.sprite.x += 1;
+        }
+
         SDL_RenderClear(rend);
         SDL_RenderCopy(rend,player.spriteSheet,&player.cutter,&player.sprite);
         SDL_RenderPresent(rend);
+        animate(&player,states);
     }
     return 0;
 }
