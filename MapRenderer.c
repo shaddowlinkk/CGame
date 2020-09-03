@@ -3,7 +3,12 @@
 //
 
 #include "MapRenderer.h"
-int rendermap(SDL_Renderer *rend,GameData *gameData){
+/**
+ * renders the backbround map;
+ * @param rend renderer
+ * @param gameData current states of the gloabl game data
+ */
+void rendermap(SDL_Renderer *rend,GameData *gameData){
     // temp def of a tile
     MapTile ground;
     ground.tileRect.h=32;
@@ -21,5 +26,4 @@ int rendermap(SDL_Renderer *rend,GameData *gameData){
             SDL_RenderCopy(rend,ground.tileTexture,NULL,&ground.tileRect);
         }
     }
-    return 0;
 }

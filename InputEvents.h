@@ -1,0 +1,9 @@
+//
+// Created by nathan on 9/3/2020.
+//
+#include "GameCore.h"
+#ifndef CGAME_INPUTEVENTS_H
+#define CGAME_INPUTEVENTS_H
+int linkEntityToUserInput(Entity *entity, GameData gameData);
+void bindEntityToBoard(Entity *entity, GameData gameData);
+#endif //CGAME_INPUTEVENTS_H

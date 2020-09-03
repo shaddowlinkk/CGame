@@ -1,6 +1,7 @@
 
 #include "GameCore.h"
 #include "MapRenderer.h"
+#include "InputEvents.h"
 #include <direct.h>
 
 
@@ -20,6 +21,10 @@ void animate(Entity *entity, int state){
     count++;
 }
 
+void moveEntity(Entity *entity){
+    entity->sprite.x += entity->velx;
+    entity->sprite.y += entity->vely;
+}
 
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
@@ -82,28 +87,22 @@ int main(int argc, char **argv) {
                 running = 0;
             }
         }
-        const Uint8 *state = SDL_GetKeyboardState(NULL);
-        if(state[SDL_SCANCODE_UP]||state[SDL_SCANCODE_W]) {
-            states=4;
-            player.sprite.y -= 1;
-        }
-        else if(state[SDL_SCANCODE_DOWN]||state[SDL_SCANCODE_S]){
-            states=3;
-            player.sprite.y+=1;
-        }
-        else if(state[SDL_SCANCODE_LEFT]||state[SDL_SCANCODE_A]) {
-            states=1;
-            player.sprite.x -= 1;
-        }
-        else if(state[SDL_SCANCODE_RIGHT]||state[SDL_SCANCODE_D]) {
-            states=2;
-            player.sprite.x += 1;
-        }
-
+        // clear old frame
         SDL_RenderClear(rend);
+
+        //game logic
+        states=linkEntityToUserInput(&player,gameData);
+        bindEntityToBoard(&player,gameData);
+        moveEntity(&player);
+
+        //creating next frame
         rendermap(rend,&gameData);
         SDL_RenderCopy(rend,player.spriteSheet,&player.cutter,&player.sprite);
+
+        //present to screeen
         SDL_RenderPresent(rend);
+
+        //animation
         animate(&player,states);
     }
     return 0;
