@@ -12,11 +12,11 @@
 void animate(Entity *entity, int state){
     //count slows the animation todo need to remove that and make it native to the rendering loop
     static int count =0;
-    if(count==0) {
+    if(count==5) {
         count=0;
         entity->cutter.y = (entity->cutter.h*state);
         entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)) );
-   }
+    }
     count++;
 }
 

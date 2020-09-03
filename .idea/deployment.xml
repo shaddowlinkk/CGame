@@ -2,14 +2,7 @@
 <project version="4">
   <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="Remote Host (1) (e07453b9-26c5-477e-835f-caaa3c6b2769)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/tmp/CGame" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="Remote Host (c99a4b5f-7ea1-439d-8d18-45abd38e17bf)">
+      <paths name="Remote Host (b3d125e0-dbd0-4800-910a-67b87dfbc322)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
