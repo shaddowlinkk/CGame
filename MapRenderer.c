@@ -10,7 +10,7 @@ int rendermap(SDL_Renderer *rend,GameData *gameData){
     ground.tileRect.w=32;
     ground.tileRect.x=0;
     ground.tileRect.y=0;
-    SDL_Surface *s = IMG_Load("Gt.png");
+    SDL_Surface *s = IMG_Load("Ground02.png");
     ground.tileTexture=SDL_CreateTextureFromSurface(rend,s);
 
 

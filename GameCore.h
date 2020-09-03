@@ -22,7 +22,7 @@ struct Entity{
     SDL_Rect cutter;// a rectangle that is used to cut the sprite sheet if needed
     SDL_Texture *spriteSheet; // if the Entity has an animation you will need cutter to cut with SDL_renderCopy
     char *textureLocation;
-    int animationStates[6];
+    int animationStates[];
 };
 
 struct CoreGameData{
