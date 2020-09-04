@@ -21,6 +21,10 @@ void animate(Entity *entity, int state){
     count++;
 }
 
+/**
+ * moves an entity based on velocity
+ * @param entity the entity that you want to move
+ */
 void moveEntity(Entity *entity){
     entity->sprite.x += entity->velx;
     entity->sprite.y += entity->vely;
@@ -68,8 +72,8 @@ int main(int argc, char **argv) {
     player.spriteSheet=tex;
     player.sprite.h=32;
     player.sprite.w=16;
-    player.sprite.x=0;
-    player.sprite.y=0;
+    player.sprite.x=gameData.window_w/2;
+    player.sprite.y=gameData.window_h/2;
     player.animationStates[0]=7;
     player.animationStates[1]=11;
     player.animationStates[2]=11;
@@ -91,8 +95,15 @@ int main(int argc, char **argv) {
         SDL_RenderClear(rend);
 
         //game logic
+        SDL_Rect re;
+        re.w=608;
+        re.h=608;
+        re.x=32;
+        re.y=32;
+
         states=linkEntityToUserInput(&player,gameData);
-        bindEntityToBoard(&player,gameData);
+        bindEntityToRect(&player,re);
+        //bindEntityToBoard(&player,gameData);
         moveEntity(&player);
 
         //creating next frame

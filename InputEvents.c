@@ -55,16 +55,41 @@ int linkEntityToUserInput(Entity *entity, GameData gameData){
 }
 
 /**
- * set the bound of the movment area to the window screen
+ * set the bound of the movement area to the window screen
  * @param entity entity that you want to bind to the window
  * @param gameData current stat of global data
  */
 void bindEntityToBoard(Entity *entity, GameData gameData){
     //todo bug::-> can get out of the screen when in bot left corner with inputs(AS SD)
-    if(entity->sprite.x<0 || entity->sprite.x>(gameData.window_w-entity->sprite.w)) {
-        entity->velx *= -1;
+    if(entity->sprite.x<0) {
+        entity->sprite.x=1;
     }
-    if(entity->sprite.y<0 || entity->sprite.y>(gameData.window_h-entity->sprite.h))
-        entity->vely *= -1;
+    if(entity->sprite.x>(gameData.window_w-entity->sprite.w)){
+        entity->sprite.x=(gameData.window_w-entity->sprite.w)-1;
+    }
+    if(entity->sprite.y>(gameData.window_h-entity->sprite.h)){
+        entity->sprite.y=(gameData.window_h-entity->sprite.h)-1;
+    }
+    if(entity->sprite.y<0 )
+        entity->sprite.y=1;
+}
+
+/**
+ * set the bound of the movement area to a rect
+ * @param entity
+ * @param gameData
+ */
+void bindEntityToRect(Entity *entity, SDL_Rect rect){
+    if(entity->sprite.x<(rect.x)) {
+        entity->sprite.x=(rect.x)+1;
+    }
+    if(entity->sprite.x>(rect.w-entity->sprite.w)){
+        entity->sprite.x=(rect.w-entity->sprite.w)-1;
+    }
+    if(entity->sprite.y>(rect.h-entity->sprite.h)){
+        entity->sprite.y=(rect.h-entity->sprite.h)-1;
+    }
+    if(entity->sprite.y<(rect.y))
+        entity->sprite.y=(rect.y)+1;
 }
 

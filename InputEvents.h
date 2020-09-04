@@ -6,4 +6,5 @@
 #define CGAME_INPUTEVENTS_H
 int linkEntityToUserInput(Entity *entity, GameData gameData);
 void bindEntityToBoard(Entity *entity, GameData gameData);
+void bindEntityToRect(Entity *entity, SDL_Rect rect);
 #endif //CGAME_INPUTEVENTS_H
