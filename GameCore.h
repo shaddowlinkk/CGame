@@ -30,7 +30,7 @@ struct Entity{
 };
 
 struct CoreGameData{
-    Entity  entityList[20];
+    Entity entityList[20];
     int map[20][20];
     MapTile Tiles[100];
     int window_h,window_w;
