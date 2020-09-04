@@ -4,9 +4,11 @@
 
 #ifndef CGAME_GAMECORE_H
 #define CGAME_GAMECORE_H
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+
 typedef struct Entity  Entity;
 typedef struct AnimationStates AnimationStates ;
 typedef struct MapTile MapTile;

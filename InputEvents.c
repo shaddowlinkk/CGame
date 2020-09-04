@@ -76,8 +76,8 @@ void bindEntityToBoard(Entity *entity, GameData gameData){
 
 /**
  * set the bound of the movement area to a rect
- * @param entity
- * @param gameData
+ * @param entity entity that you want to bind to the window
+ * @param rect the rectangle that you want the entity to be bound in
  */
 void bindEntityToRect(Entity *entity, SDL_Rect rect){
     if(entity->sprite.x<(rect.x)) {
