@@ -65,6 +65,6 @@ void bindEntityToBoard(Entity *entity, GameData gameData){
         entity->velx *= -1;
     }
     if(entity->sprite.y<0 || entity->sprite.y>(gameData.window_h-entity->sprite.h))
-        entity->vely*= -1;
+        entity->vely *= -1;
 }
 
