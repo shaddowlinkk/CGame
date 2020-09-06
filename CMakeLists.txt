@@ -12,6 +12,6 @@ include_directories(${SDL2_ttf_INCLUDE_DIR})
 include_directories(${SDL2_INCLUDE_DIRS})
 
 
-add_executable(CGame main.c MapRenderer.c InputEvents.c GameCore.h)
+add_executable(CGame main.c MapRenderer.c InputEvents.c UtilRender.c GameCore.h)
 
 target_link_libraries(CGame ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_ttf_LIBRARY})

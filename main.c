@@ -2,8 +2,9 @@
 #include "GameCore.h"
 #include "MapRenderer.h"
 #include "InputEvents.h"
+#include "UtilRender.h"
 #include <direct.h>
-
+#include <stdio.h>
 
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
@@ -30,10 +31,12 @@ void moveEntity(Entity *entity){
     entity->sprite.y += entity->vely;
 }
 
+
+
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     GameData gameData;
-    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,640,640,SDL_WINDOW_OPENGL);
+    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,704,704,SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN);
     SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
     if (!win){
         SDL_Quit();
@@ -68,19 +71,19 @@ int main(int argc, char **argv) {
 
     int running=1;
     SDL_Event event;
-    Entity player;
-    player.spriteSheet=tex;
-    player.sprite.h=32;
-    player.sprite.w=16;
-    player.sprite.x=gameData.window_w/2;
-    player.sprite.y=gameData.window_h/2;
-    player.animationStates[0]=7;
-    player.animationStates[1]=11;
-    player.animationStates[2]=11;
-    player.animationStates[3]=8;
-    player.animationStates[4]=9;
-    player.animationStates[5]=16;
-    player.cutter=player.sprite;
+    gameData.entityList[0].spriteSheet=tex;
+    gameData.entityList[0].sprite.h=32;
+    gameData.entityList[0].sprite.w=16;
+    gameData.entityList[0].sprite.x=gameData.window_w/2;
+    gameData.entityList[0].sprite.y=gameData.window_h/2;
+    gameData.entityList[0].animationStates[0]=7;
+    gameData.entityList[0].animationStates[1]=11;
+    gameData.entityList[0].animationStates[2]=11;
+    gameData.entityList[0].animationStates[3]=8;
+    gameData.entityList[0].animationStates[4]=9;
+    gameData.entityList[0].animationStates[5]=16;
+    gameData.entityList[0].cutter=gameData.entityList[0].sprite;
+    gameData.entCount=1;
     SDL_RenderClear(rend);
 
     while(running) {
@@ -96,25 +99,26 @@ int main(int argc, char **argv) {
 
         //game logic
         SDL_Rect re;
-        re.w=608;
-        re.h=608;
+        re.w=gameData.window_w-64;
+        re.h=gameData.window_h-64;
         re.x=32;
         re.y=32;
-
-        states=linkEntityToUserInput(&player,gameData);
-        bindEntityToRect(&player,re);
-        //bindEntityToBoard(&player,gameData);
-        moveEntity(&player);
+        states=linkEntityToUserInput(&gameData.entityList[0],gameData);
+        bindEntityToRect(&gameData.entityList[0],re);
+        bindEntityToBoard(&gameData.entityList[0],gameData);
+        moveEntity(&gameData.entityList[0]);
 
         //creating next frame
         rendermap(rend,&gameData);
-        SDL_RenderCopy(rend,player.spriteSheet,&player.cutter,&player.sprite);
+        SDL_RenderDrawRect(rend,&re);
+        renderEntityBox(gameData,rend);
+        SDL_RenderCopy(rend, gameData.entityList[0].spriteSheet,&gameData.entityList[0].cutter,&gameData.entityList[0].sprite);
 
         //present to screeen
         SDL_RenderPresent(rend);
 
         //animation
-        animate(&player,states);
+        animate(&gameData.entityList[0],states);
     }
     return 0;
 }

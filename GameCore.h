@@ -9,17 +9,13 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-typedef struct Entity  Entity;
-typedef struct AnimationStates AnimationStates ;
-typedef struct MapTile MapTile;
-typedef struct CoreGameData GameData;
 
-struct MapTile{
+typedef struct MapTile{
     SDL_Texture *tileTexture;
     SDL_Rect tileRect;
-};
+}MapTile;
 
-struct Entity{
+typedef struct Entity{
     int ID;
     SDL_Rect sprite;// a rectangle that represent the sprite on the board
     SDL_Rect cutter;// a rectangle that is used to cut the sprite sheet if needed
@@ -27,13 +23,14 @@ struct Entity{
     char *textureLocation;
     int velx,vely;
     int animationStates[];
-};
+}Entity;
 
-struct CoreGameData{
+typedef struct CoreGameData{
     Entity entityList[20];
+    int entCount;
     int map[20][20];
     MapTile Tiles[100];
     int window_h,window_w;
-};
+}GameData;
 
 #endif //CGAME_GAMECORE_H

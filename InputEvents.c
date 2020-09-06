@@ -60,7 +60,6 @@ int linkEntityToUserInput(Entity *entity, GameData gameData){
  * @param gameData current stat of global data
  */
 void bindEntityToBoard(Entity *entity, GameData gameData){
-    //todo bug::-> can get out of the screen when in bot left corner with inputs(AS SD)
     if(entity->sprite.x<0) {
         entity->sprite.x=1;
     }
@@ -83,11 +82,11 @@ void bindEntityToRect(Entity *entity, SDL_Rect rect){
     if(entity->sprite.x<(rect.x)) {
         entity->sprite.x=(rect.x)+1;
     }
-    if(entity->sprite.x>(rect.w-entity->sprite.w)){
-        entity->sprite.x=(rect.w-entity->sprite.w)-1;
+    if(entity->sprite.x>(rect.w-entity->sprite.w)+rect.x){
+        entity->sprite.x=(rect.w-entity->sprite.w)+rect.x-1;
     }
-    if(entity->sprite.y>(rect.h-entity->sprite.h)){
-        entity->sprite.y=(rect.h-entity->sprite.h)-1;
+    if(entity->sprite.y>(rect.h-entity->sprite.h)+rect.y){
+        entity->sprite.y=(rect.h-entity->sprite.h)+rect.y-1;
     }
     if(entity->sprite.y<(rect.y))
         entity->sprite.y=(rect.y)+1;
