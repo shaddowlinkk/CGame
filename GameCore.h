@@ -8,7 +8,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "LinkedList.h"
 
 
 typedef struct MapTile{
@@ -23,12 +22,16 @@ typedef struct Entity{
     SDL_Texture *spriteSheet; // if the Entity has an animation you will need cutter to cut with SDL_renderCopy
     char *textureLocation;
     int velx,vely;
-    int animationStates[];
+    int animationStates[15];
 }Entity;
-
+typedef struct _node
+{
+    Entity item;
+    struct _node *next;
+} node;
 typedef struct CoreGameData{
     Entity entityList[20];
-    node *head;
+    node *start;
     int entCount;
     int map[20][20];
     MapTile Tiles[100];

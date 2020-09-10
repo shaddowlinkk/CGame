@@ -6,4 +6,5 @@
 #define CGAME_UTILRENDER_H
 
 void renderEntityBox(GameData data, SDL_Renderer *rend);
+
 #endif //CGAME_UTILRENDER_H

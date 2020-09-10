@@ -1,7 +1,7 @@
 //
 // Created by nathan on 9/7/2020.
 //
-
+#include <stdio.h>
 #include "LinkedList.h"
 #define TRUE 1
 #define FALSE 0
@@ -62,14 +62,33 @@ void Removenode(node **head, int ID)
     }
 }
 
+Entity *Findnode(node **head, int ID)
+{
+    BOOL present = FALSE;
+    node *old;
+    node **tracer = head;
+
+    while((*tracer) && !(present = (*tracer)->item.ID==ID))
+        tracer = &(*tracer)->next;
+
+    if(present)
+    {
+        //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"FOUND:%i",(*tracer)->item.ID);
+        Entity *out = &(*tracer)->item;
+        return out;
+    }
+}
+
 /**
  * prints linked list nodes id (should do this SDL doesnt print to stdout)
  * @param head
  */
 void PrintList(node **head)
 {
+    //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"test");
     node **tracer = head;
     while (*tracer) {
+        //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"%i",(*tracer)->item.ID);
         tracer = &(*tracer)->next;
     }
 }
