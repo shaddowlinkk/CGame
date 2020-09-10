@@ -14,3 +14,26 @@ void renderEntityBox(GameData data, SDL_Renderer *rend){
             SDL_RenderDrawRect(rend, &data.entityList[i].sprite);
     }
 }
+void renderEntityBoxList(GameData data, SDL_Renderer *rend){
+    node **tracer = &data.start;
+    if(!*tracer){
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 1");
+    }else {
+        while (*tracer) {
+            SDL_RenderDrawRect(rend, &(*tracer)->item.sprite);
+            tracer = &(*tracer)->next;
+        }
+    }
+}
+
+void renderEntitys(GameData data, SDL_Renderer *rend){
+    node **tracer = &data.start;
+    if(!*tracer){
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 2");
+    }else {
+        while (*tracer) {
+            SDL_RenderCopy(rend, (*tracer)->item.spriteSheet,&(*tracer)->item.cutter,&(*tracer)->item.sprite);
+            tracer = &(*tracer)->next;
+        }
+    }
+}
