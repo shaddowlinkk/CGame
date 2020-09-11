@@ -4,6 +4,7 @@
 #include "InputEvents.h"
 #include "UtilRender.h"
 #include "LinkedList.h"
+#include "FileIO.h"
 #include <direct.h>
 #include <stdio.h>
 
@@ -100,7 +101,7 @@ int main(int argc, char **argv) {
 
     int running=1;
     SDL_Event event;
-    Entity new;
+/*    Entity new;
     new.ID=0;
     new.spriteSheet=tex;
     new.sprite.h=32;
@@ -117,11 +118,16 @@ int main(int argc, char **argv) {
     new.animationStates[3]=8;
     new.animationStates[4]=9;
     new.animationStates[5]=16;
+    memset(new.textureName,0x00,sizeof(20));
+    strcpy(new.textureName,"test.png");*/
 
 
+    //writeToFile(&new);
+    //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"read:%i",t.sprite.w);
     //inisalizing the list
     gameData.start=NULL;
-    Insertnode(&gameData.start,NewElement(new));
+  //  Entity new = readEntityFromFile(rend);
+    Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
 
 
     SDL_RenderClear(rend);

@@ -20,7 +20,7 @@ typedef struct _Entity{
     SDL_Rect sprite;// a rectangle that represent the sprite on the board
     SDL_Rect cutter;// a rectangle that is used to cut the sprite sheet if needed
     SDL_Texture *spriteSheet; // if the Entity has an animation you will need cutter to cut with SDL_renderCopy
-    char *textureLocation;
+    char textureName[20];
     int velx,vely;
     int animationStates[15];
 }Entity;
