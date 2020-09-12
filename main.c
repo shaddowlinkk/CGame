@@ -66,7 +66,7 @@ void moveEntity(GameData data){
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     GameData gameData;
-    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,704,704,SDL_WINDOW_OPENGL);
+    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,608,608,SDL_WINDOW_OPENGL);
     SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
     if (!win){
         SDL_Quit();
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return 2;
     }
-    SDL_Surface  *surface = IMG_Load("test.png");
+    SDL_Surface  *surface = IMG_Load(".\\Textures\\Floor.png");
     if(!surface){
         char tmp[100];
         getcwd(tmp,100);
@@ -125,11 +125,26 @@ int main(int argc, char **argv) {
     //writeToFile(&new);
     //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"read:%i",t.sprite.w);
     //inisalizing the list
+    LoadMapFile("test.map",&gameData);
     gameData.start=NULL;
   //  Entity new = readEntityFromFile(rend);
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
 
 
+    SDL_Rect t;
+    t.w=64;
+    t.h=32;
+    t.x=32+32;
+    t.y=32;
+
+    SDL_Rect c;
+    c.w=64;
+    c.h=32;
+    c.x=0;
+    c.y=0;
+    SDL_Point p;
+    p.x=0;
+    p.y=0;
     SDL_RenderClear(rend);
     while(running) {
         int states=0;
@@ -149,15 +164,20 @@ int main(int argc, char **argv) {
         re.x=32;
         re.y=32;
 
+
         linkEntityToUserInput(Findnode(&gameData.start,0),gameData);
         bindEntitysToRect(gameData,re);
         moveEntity(gameData);
 
         //creating next frame
-        rendermap(rend,&gameData);
+        //rendermap(rend,&gameData);
+        renderMapFromFile(rend,&gameData);
+
         SDL_RenderDrawRect(rend,&re);
         renderEntityBoxList(gameData,rend);
         renderEntitys(gameData,rend);
+        //todo messing with rotationg
+        SDL_RenderCopyEx(rend,tex,&c,&t,90,&p,SDL_FLIP_NONE);
 
         //present to screeen
         SDL_RenderPresent(rend);

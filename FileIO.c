@@ -32,3 +32,22 @@ Entity readEntityFromFile(char *name,SDL_Renderer *rend){
     entity.spriteSheet=tex;
     return entity;
 }
+
+void LoadMapFile(char *name,GameData *data){
+    FILE *map;
+    map= fopen(name,"r");
+    unsigned char tmp[4];
+    int count=0;
+    memset(data->map,0,sizeof(data->map));
+    while (fread(tmp,4,1,map)) {
+/*        if (tmp[3]==1) {
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%x", tmp[0]);
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%x", tmp[1]);
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%x", tmp[2]);
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%x", tmp[3]);
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%x", (tmp[0]|(tmp[1]<<8)|(tmp[2]<<16)|(tmp[3]<<24)));
+    }*/
+        data->map[(count/(sizeof(*data->map)/4))][(count%(sizeof(*data->map)/4))] += (tmp[0]<<24) | (tmp[1]<<16) | (tmp[2]<<8) | (tmp[3]);
+        count++;
+    }
+}

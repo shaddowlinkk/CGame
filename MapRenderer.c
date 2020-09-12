@@ -27,3 +27,23 @@ void rendermap(SDL_Renderer *rend,GameData *gameData){
         }
     }
 }
+
+void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
+    // temp def of a tile
+    MapTile ground;
+    ground.tileRect.h=32;
+    ground.tileRect.w=32;
+    ground.tileRect.x=0;
+    ground.tileRect.y=0;
+    SDL_Surface *s = IMG_Load("Ground02.png");
+    ground.tileTexture=SDL_CreateTextureFromSurface(rend,s);
+    for (int y=0;y<sizeof(*gameData->map)/4;y++){
+        for (int x=0;x<sizeof(*gameData->map)/4;x++){
+            if(gameData->map[y][x]==1) {
+                ground.tileRect.x = (x * 32);
+                ground.tileRect.y = (y * 32);
+                SDL_RenderCopy(rend, ground.tileTexture, NULL, &ground.tileRect);
+            }
+        }
+    }
+}
