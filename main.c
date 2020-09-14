@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
         renderEntityBoxList(gameData,rend);
         renderEntitys(gameData,rend);
         //todo messing with rotationg
-        SDL_RenderCopyEx(rend,tex,&c,&t,90,&p,SDL_FLIP_NONE);
+        SDL_RenderCopyEx(rend,tex,&c,&t,90,&p,SDL_FLIP_VERTICAL);
 
         //present to screeen
         SDL_RenderPresent(rend);
