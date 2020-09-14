@@ -51,3 +51,12 @@ void LoadMapFile(char *name,GameData *data){
         count++;
     }
 }
+void LoadTileData(GameData *data){
+    FILE *tiles;
+    tiles=fopen(".\\Entitys\\TileData.dat","r");
+    SDL_Rect temp;
+    for(int i =0;i<20;i++){
+        fread(&temp,sizeof(struct SDL_Rect),1,tiles);
+        data->Tiles[i].tileRect=temp;
+    }
+}

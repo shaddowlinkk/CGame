@@ -126,12 +126,14 @@ int main(int argc, char **argv) {
     //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"read:%i",t.sprite.w);
     //inisalizing the list
     LoadMapFile("test.map",&gameData);
+    LoadTileData(&gameData);
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"ss:%i",gameData.Tiles[1].tileRect.x);
     gameData.start=NULL;
   //  Entity new = readEntityFromFile(rend);
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
 
 
-    SDL_Rect t;
+/*    SDL_Rect t;
     t.w=64;
     t.h=32;
     t.x=32+32;
@@ -144,7 +146,7 @@ int main(int argc, char **argv) {
     c.y=0;
     SDL_Point p;
     p.x=0;
-    p.y=0;
+    p.y=0;*/
     SDL_RenderClear(rend);
     while(running) {
         int states=0;
@@ -177,7 +179,7 @@ int main(int argc, char **argv) {
         renderEntityBoxList(gameData,rend);
         renderEntitys(gameData,rend);
         //todo messing with rotationg
-        SDL_RenderCopyEx(rend,tex,&c,&t,90,&p,SDL_FLIP_VERTICAL);
+     //   SDL_RenderCopyEx(rend,tex,&c,&t,90,&p,SDL_FLIP_VERTICAL);
 
         //present to screeen
         SDL_RenderPresent(rend);
