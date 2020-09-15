@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return 2;
     }
-    SDL_Surface  *surface = IMG_Load(".\\Textures\\Floor.png");
+/*    SDL_Surface  *surface = IMG_Load(".\\Textures\\Floor.png");
     if(!surface){
         char tmp[100];
         getcwd(tmp,100);
@@ -97,10 +97,9 @@ int main(int argc, char **argv) {
         SDL_DestroyWindow(win);
         SDL_Quit();
         return 4;
-    }
+    }*/
 
-    int running=1;
-    SDL_Event event;
+
 /*    Entity new;
     new.ID=0;
     new.spriteSheet=tex;
@@ -123,14 +122,12 @@ int main(int argc, char **argv) {
 
 
     //writeToFile(&new);
-    //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"read:%i",t.sprite.w);
-    //inisalizing the list
-    //LoadMapFile("test.map",&gameData);
+
+    //inisalizing the list and loading in data
     LoadBigMapFile("temp.map",&gameData);
     LoadTileData(&gameData);
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"ss:%i",gameData.map[4][4]);
     gameData.start=NULL;
-  //  Entity new = readEntityFromFile(rend);
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
 
 
@@ -149,6 +146,8 @@ int main(int argc, char **argv) {
     p.x=0;
     p.y=0;*/
     SDL_RenderClear(rend);
+    int running=1;
+    SDL_Event event;
     while(running) {
         int states=0;
         // Process events
