@@ -8,7 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-
+#define mapsize 22
 
 typedef struct _MapTile{
     SDL_Texture *tileTexture;
@@ -35,7 +35,7 @@ typedef struct _CoreGameData{
     Entity entityList[20];
     node *start;
     int entCount;
-    int map[19][19];
+    int map[mapsize][mapsize];
     MapTile Tiles[100];
     int window_h,window_w;
 }GameData;

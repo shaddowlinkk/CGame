@@ -51,6 +51,17 @@ void LoadMapFile(char *name,GameData *data){
         count++;
     }
 }
+void LoadBigMapFile(char *name,GameData *data){
+    FILE *map;
+    map= fopen(name,"r");
+    memset(data->map,0x00,sizeof(data->map));
+    int tmp,count=0;
+    while (fread(&tmp,sizeof(int),1,map)){
+        data->map[(count/(sizeof(*data->map)/4))][(count%(sizeof(*data->map)/4))]=tmp;
+        count++;
+    }
+    fclose(map);
+}
 void LoadTileData(GameData *data){
     FILE *tiles;
     tiles=fopen(".\\Entitys\\TileData.dat","r");

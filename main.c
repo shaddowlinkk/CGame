@@ -66,7 +66,7 @@ void moveEntity(GameData data){
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     GameData gameData;
-    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,608,608,SDL_WINDOW_OPENGL);
+    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,(mapsize*32),(mapsize*32),SDL_WINDOW_OPENGL);
     SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
     if (!win){
         SDL_Quit();
@@ -125,9 +125,10 @@ int main(int argc, char **argv) {
     //writeToFile(&new);
     //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"read:%i",t.sprite.w);
     //inisalizing the list
-    LoadMapFile("test.map",&gameData);
+    //LoadMapFile("test.map",&gameData);
+    LoadBigMapFile("temp.map",&gameData);
     LoadTileData(&gameData);
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"ss:%i",gameData.Tiles[1].tileRect.x);
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"ss:%i",gameData.map[4][4]);
     gameData.start=NULL;
   //  Entity new = readEntityFromFile(rend);
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));

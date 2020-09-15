@@ -39,10 +39,20 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
     ground.tileTexture=SDL_CreateTextureFromSurface(rend,s);
     for (int y=0;y<sizeof(*gameData->map)/4;y++){
         for (int x=0;x<sizeof(*gameData->map)/4;x++){
-                ground.tileRect.x = (x * 32);
-                ground.tileRect.y = (y * 32);
-                SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"%i",gameData->Tiles[gameData->map[y][x]].tileRect.x);
-                SDL_RenderCopy(rend, ground.tileTexture, &gameData->Tiles[gameData->map[y][x]].tileRect, &ground.tileRect);
+            ground.tileRect.x = (x * 32);
+            ground.tileRect.y = (y * 32);
+            if(gameData->map[y][x]>=7 && gameData->map[y][x]<=10){
+                SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"????");
+                ground.tileRect.h=32;
+                ground.tileRect.w=64;
+                if (gameData->map[y][x]==9 || gameData->map[y][x] ==7){
+                    SDL_RenderCopy(rend, ground.tileTexture, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
+                }else{
+
+                }
+            }else{
+                SDL_RenderCopy(rend, ground.tileTexture, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
+            }
         }
     }
 }
