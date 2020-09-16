@@ -66,7 +66,7 @@ void moveEntity(GameData data){
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     GameData gameData;
-    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,(mapsize*32),(mapsize*32),SDL_WINDOW_OPENGL);
+    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,704,704,SDL_WINDOW_OPENGL);
     SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
     if (!win){
         SDL_Quit();
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
     //writeToFile(&new);
 
     //inisalizing the list and loading in data
-    LoadBigMapFile("temp.map",&gameData);
+    LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"ss:%i",gameData.map[4][4]);
     gameData.start=NULL;

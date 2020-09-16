@@ -35,7 +35,7 @@ typedef struct _CoreGameData{
     Entity entityList[20];
     node *start;
     int entCount;
-    int map[mapsize][mapsize];
+    int map[22][22];
     MapTile Tiles[100];
     int window_h,window_w;
 }GameData;

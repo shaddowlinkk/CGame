@@ -7,7 +7,7 @@ void writeEntityToFile(char *name,Entity *entity){
     FILE *player;
     char filepath[31]=".\\Entitys\\";
     strcat(filepath,name);
-    player=fopen(filepath,"w");
+    player=fopen(filepath,"wb");
     fwrite(entity,sizeof(Entity),1,player);
     fclose(player);
 }
@@ -19,7 +19,7 @@ Entity readEntityFromFile(char *name,SDL_Renderer *rend){
     strcat(filepath,name);
 
     //reading from file
-    player=fopen(filepath,"r");
+    player=fopen(filepath,"rb");
     fread(&entity,sizeof(Entity),1,player);
     fclose(player);
 
@@ -35,7 +35,7 @@ Entity readEntityFromFile(char *name,SDL_Renderer *rend){
 
 void LoadMapFile(char *name,GameData *data){
     FILE *map;
-    map= fopen(name,"r");
+    map= fopen(name,"rb");
     unsigned char tmp[4];
     int count=0;
     memset(data->map,0,sizeof(data->map));
@@ -53,7 +53,7 @@ void LoadMapFile(char *name,GameData *data){
 }
 void LoadBigMapFile(char *name,GameData *data){
     FILE *map;
-    map= fopen(name,"r");
+    map= fopen(name,"rb");
     memset(data->map,0x00,sizeof(data->map));
     int tmp,count=0;
     while (fread(&tmp,sizeof(int),1,map)){
