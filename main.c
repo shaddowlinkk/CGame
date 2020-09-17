@@ -7,7 +7,6 @@
 #include "FileIO.h"
 #include <direct.h>
 #include <stdio.h>
-
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
  * @param entity what ever entity you are trying to animate.
@@ -79,6 +78,9 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return 2;
     }
+    SDL_Surface *s = IMG_Load(".\\Textures\\Floor.png");
+    gameData.GroundSheet=SDL_CreateTextureFromSurface(rend,s);
+    SDL_FreeSurface(s);
 /*    SDL_Surface  *surface = IMG_Load(".\\Textures\\Floor.png");
     if(!surface){
         char tmp[100];

@@ -32,6 +32,7 @@ typedef struct _node
 } node;
 
 typedef struct _CoreGameData{
+    SDL_Texture *GroundSheet;
     Entity entityList[20];
     node *start;
     int entCount;
