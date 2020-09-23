@@ -5,8 +5,6 @@
 #include "UtilRender.h"
 #include "LinkedList.h"
 #include "FileIO.h"
-#include <direct.h>
-#include <stdio.h>
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
  * @param entity what ever entity you are trying to animate.
@@ -65,7 +63,7 @@ void moveEntity(GameData data){
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     GameData gameData;
-    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,704,704,SDL_WINDOW_OPENGL);
+    SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,(mapsize*32),mapsize*32,SDL_WINDOW_OPENGL);
     SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
     if (!win){
         SDL_Quit();
@@ -81,26 +79,6 @@ int main(int argc, char **argv) {
     SDL_Surface *s = IMG_Load(".\\Textures\\Floor.png");
     gameData.GroundSheet=SDL_CreateTextureFromSurface(rend,s);
     SDL_FreeSurface(s);
-/*    SDL_Surface  *surface = IMG_Load(".\\Textures\\Floor.png");
-    if(!surface){
-        char tmp[100];
-        getcwd(tmp,100);
-        SDL_Log("%s",tmp );
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 3;
-    }
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(rend,surface);
-    SDL_FreeSurface(surface);
-    if(!tex){
-        SDL_Log("error %s\n",SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 4;
-    }*/
-
 
 /*    Entity new;
     new.ID=0;
@@ -128,25 +106,11 @@ int main(int argc, char **argv) {
     //inisalizing the list and loading in data
     LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"ss:%i",gameData.map[4][4]);
     gameData.start=NULL;
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
 
 
-/*    SDL_Rect t;
-    t.w=64;
-    t.h=32;
-    t.x=32+32;
-    t.y=32;
 
-    SDL_Rect c;
-    c.w=64;
-    c.h=32;
-    c.x=0;
-    c.y=0;
-    SDL_Point p;
-    p.x=0;
-    p.y=0;*/
     SDL_RenderClear(rend);
     int running=1;
     SDL_Event event;
@@ -174,14 +138,11 @@ int main(int argc, char **argv) {
         moveEntity(gameData);
 
         //creating next frame
-        //rendermap(rend,&gameData);
         renderMapFromFile(rend,&gameData);
 
         SDL_RenderDrawRect(rend,&re);
         renderEntityBoxList(gameData,rend);
         renderEntitys(gameData,rend);
-        //todo messing with rotationg
-     //   SDL_RenderCopyEx(rend,tex,&c,&t,90,&p,SDL_FLIP_VERTICAL);
 
         //present to screeen
         SDL_RenderPresent(rend);
