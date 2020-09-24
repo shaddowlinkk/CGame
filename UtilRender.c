@@ -3,15 +3,21 @@
 //
 
 #include "UtilRender.h"
+#include "CollisionDetection.h"
+#include "LinkedList.h"
+#include <stdbool.h>
 /**
  * renderd the SDL RECT that defines how an entity is renders
  * @param data the game state
  * @param rend an SDL renderer
  */
-void renderEntityBox(GameData data, SDL_Renderer *rend){
+void renderTriggerBox(GameData data, SDL_Renderer *rend){
 
-    for (int i = 0; i < data.entCount; i++) {
-            SDL_RenderDrawRect(rend, &data.entityList[i].sprite);
+    for (int i = 0; i < data.triggerCount; i++) {
+        if(checkCollision(data.triggerList[i].Rect,Findnode(&data.start,0)->sprite))
+            SDL_RenderFillRect(rend,&data.triggerList[i].Rect);
+        else
+          SDL_RenderDrawRect(rend, &data.triggerList[i].Rect);
     }
 }
 void renderEntityBoxList(GameData data, SDL_Renderer *rend){

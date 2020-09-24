@@ -5,6 +5,7 @@
 #include "UtilRender.h"
 #include "LinkedList.h"
 #include "FileIO.h"
+//#include "CollisionDetection.h"
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
  * @param entity what ever entity you are trying to animate.
@@ -141,6 +142,7 @@ int main(int argc, char **argv) {
         renderMapFromFile(rend,&gameData);
 
         SDL_RenderDrawRect(rend,&re);
+        renderTriggerBox(gameData,rend);
         renderEntityBoxList(gameData,rend);
         renderEntitys(gameData,rend);
 

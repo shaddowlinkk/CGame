@@ -5,7 +5,7 @@
 #ifndef CGAME_UTILRENDER_H
 #define CGAME_UTILRENDER_H
 
-void renderEntityBox(GameData data, SDL_Renderer *rend);
+void renderTriggerBox(GameData data, SDL_Renderer *rend);
 void renderEntityBoxList(GameData data, SDL_Renderer *rend);
 void renderEntitys(GameData data, SDL_Renderer *rend);
 

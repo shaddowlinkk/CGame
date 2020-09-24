@@ -25,6 +25,10 @@ typedef struct _Entity{
     int animationStates[15];
 }Entity;
 
+typedef struct _TriggerAreas{
+    SDL_Rect Rect;
+}Trigger;
+
 typedef struct _node
 {
     Entity item;
@@ -33,9 +37,9 @@ typedef struct _node
 
 typedef struct _CoreGameData{
     SDL_Texture *GroundSheet;
-    Entity entityList[20];
+    Trigger triggerList[20];
     node *start;
-    int entCount;
+    int triggerCount;
     int map[mapsize][mapsize];
     MapTile Tiles[100];
     int window_h,window_w;
