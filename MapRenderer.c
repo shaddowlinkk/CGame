@@ -29,7 +29,7 @@ void rendermap(SDL_Renderer *rend,GameData *gameData){
 }
 
 void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
-    // todo re write to use facode texture
+    // todo re write to use facade texture
     MapTile ground;
     Trigger trigger;
     ground.tileRect.h=32;
@@ -43,7 +43,7 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
     for (int y=0;y<size;y++){
         for (int x=0;x<size;x++){
             trigger.Rect.h=32;
-            trigger.Rect.w=64;
+            trigger.Rect.w=32;
             ground.tileRect.x = (x * 32);
             ground.tileRect.y = (y * 32);
             trigger.Rect.x=(x*32);
@@ -54,7 +54,8 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                 ground.tileRect.h=32;
                 ground.tileRect.w=64;
                 if (gameData->map[y][x]==9 || gameData->map[y][x] ==7){
-                    trigger.Rect.h=10;
+                    trigger.Rect.x=(x*32)+16;
+                    trigger.Rect.h=2;
                     if(gameData->map[y][x] ==7&&(gameData->currentRoom->door&(mask<<3))!=0){
                         SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
                         trigger.doornum=3;
@@ -65,19 +66,21 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                     }else if(gameData->map[y][x] ==9&&(gameData->currentRoom->door&(mask<<1))!=0){
                         SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
                         trigger.doornum=1;
-                        trigger.Rect.y-=10;
+                        trigger.Rect.y-=2;
                         gameData->triggerList[gameData->triggerCount]=trigger;
                         gameData->triggerCount++;
                         gameData->map[y][x+1]=-1;
                     }else{
+                        gameData->map[y][x+1]=2;
                         ground.tileRect.h=32;
                         ground.tileRect.w=32;
                         SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[2].tileRect,&ground.tileRect);
                     }
 
                 }else{
-                    trigger.Rect.h=64;
-                    trigger.Rect.w=10;
+                    trigger.Rect.y=(y*32)+16;
+                    trigger.Rect.h=32;
+                    trigger.Rect.w=2;
 
                     SDL_Point p;
                     p.x=0;
@@ -93,7 +96,7 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                     }else if(gameData->map[y][x]==10&&(gameData->currentRoom->door&(mask<<2))!=0){
                         SDL_RenderCopyEx(rend,gameData->GroundSheet,&gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect,90,&p,SDL_FLIP_NONE);
                         trigger.doornum=2;
-                        trigger.Rect.x-=10;
+                        trigger.Rect.x-=2;
                         gameData->triggerList[gameData->triggerCount]=trigger;
                         gameData->triggerCount++;
                     }else{

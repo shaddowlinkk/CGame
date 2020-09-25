@@ -5,6 +5,7 @@
 #include "Rendering.h"
 #include "LinkedList.h"
 #include "FileIO.h"
+#include "CollisionEvents.h"
 //#include "CollisionDetection.h"
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
@@ -62,8 +63,10 @@ void moveEntity(GameData data){
 
 
 int main(int argc, char **argv) {
+    //todo update rendering and inputEvents so that thay pass a ptr not all of gameData
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
+    srand(time(0));
     GameData gameData;
     SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,(mapsize*32),mapsize*32,SDL_WINDOW_OPENGL);
     SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
@@ -141,6 +144,8 @@ int main(int argc, char **argv) {
 
         linkEntityToUserInput(Findnode(&gameData.start,0),gameData);
         bindEntitysToRect(gameData,re);
+        doorTiggerCollition(&gameData);
+
         moveEntity(gameData);
 
         //creating next frame

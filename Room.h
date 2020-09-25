@@ -17,4 +17,5 @@ typedef struct _room{
 #define INIT_ROOM_ARRAY(x) x[0]=NULL,x[1]=NULL,x[2]=NULL,x[3]=NULL;
 Room *initRooms();
 Room *enterRoom(int door,Room *inRoom);
+void freeRoomsAtDepth(Room *room,int depth,Room *last);
 #endif //CGAME_ROOM_H

@@ -3,9 +3,6 @@
 //
 
 #include "Rendering.h"
-#include "CollisionDetection.h"
-#include "LinkedList.h"
-#include <stdbool.h>
 /**
  * renderd the SDL RECT that defines how an entity is renders
  * @param data the game state
@@ -14,12 +11,6 @@
 void renderTriggerBox(GameData *data, SDL_Renderer *rend){
 
     for (int i = 0; i < data->triggerCount; i++) {
-        if(checkCollision(data->triggerList[i].Rect,Findnode(&data->start,0)->sprite)){
-            data->currentRoom=enterRoom(data->triggerList[i].doornum,data->currentRoom);
-            Findnode(&data->start,0)->sprite.x=data->window_w/2;
-            Findnode(&data->start,0)->sprite.y=data->window_h/2;
-        }
-        else
           SDL_RenderDrawRect(rend, &data->triggerList[i].Rect);
     }
 }
