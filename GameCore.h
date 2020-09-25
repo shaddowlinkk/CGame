@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include "Room.h"
 #define mapsize 22
 
 typedef struct _MapTile{
@@ -43,6 +44,7 @@ typedef struct _CoreGameData{
     int map[mapsize][mapsize];
     MapTile Tiles[100];
     int window_h,window_w;
+    Room *currentRoom;
 }GameData;
 
 #endif //CGAME_GAMECORE_H

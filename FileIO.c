@@ -54,10 +54,10 @@ void LoadMapFile(char *name,GameData *data){
 void LoadBigMapFile(char *name,GameData *data){
     FILE *map;
     map= fopen(name,"rb");
-    memset(data->map,0x00,sizeof(data->map));
+    memset(data->map,0x00,mapsize);
     int tmp,count=0;
     while (fread(&tmp,sizeof(int),1,map)){
-        data->map[(count/(sizeof(*data->map)/4))][(count%(sizeof(*data->map)/4))]=tmp;
+        data->map[(count/mapsize)][(count%mapsize)]=tmp;
         count++;
     }
     fclose(map);

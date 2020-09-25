@@ -108,6 +108,7 @@ int main(int argc, char **argv) {
     LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
     gameData.start=NULL;
+    gameData.currentRoom=initRooms();
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
 
 
