@@ -11,13 +11,11 @@
 #include "Room.h"
 #define mapsize 22
 
-typedef struct _MapTile{
-    SDL_Texture *tileTexture;
-    SDL_Rect tileRect;
-}MapTile;
+
 
 typedef struct _Entity{
-    int ID,state;
+    int ID;
+    int state;
     SDL_Rect sprite;// a rectangle that represent the sprite on the board
     SDL_Rect cutter;// a rectangle that is used to cut the sprite sheet if needed
     SDL_Texture *spriteSheet; // if the Entity has an animation you will need cutter to cut with SDL_renderCopy
@@ -28,6 +26,7 @@ typedef struct _Entity{
 
 typedef struct _TriggerAreas{
     SDL_Rect Rect;
+    int doornum;
 }Trigger;
 
 typedef struct _node
@@ -36,12 +35,18 @@ typedef struct _node
     struct _node *next;
 } node;
 
+typedef struct _MapTile{
+    SDL_Texture *tileTexture;
+    SDL_Rect tileRect;
+}MapTile;
+
 typedef struct _CoreGameData{
+    //map needs to be first for some reason
+    int map[mapsize][mapsize];
     SDL_Texture *GroundSheet;
     Trigger triggerList[20];
     node *start;
     int triggerCount;
-    int map[mapsize][mapsize];
     MapTile Tiles[100];
     int window_h,window_w;
     Room *currentRoom;

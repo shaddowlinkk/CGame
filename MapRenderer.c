@@ -57,12 +57,14 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                     trigger.Rect.h=10;
                     if(gameData->map[y][x] ==7&&(gameData->currentRoom->door&(mask<<3))!=0){
                         SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
+                        trigger.doornum=3;
                         trigger.Rect.y+=32;
                         gameData->triggerList[gameData->triggerCount]=trigger;
                         gameData->triggerCount++;
                         gameData->map[y][x+1]=-1;
                     }else if(gameData->map[y][x] ==9&&(gameData->currentRoom->door&(mask<<1))!=0){
                         SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
+                        trigger.doornum=1;
                         trigger.Rect.y-=10;
                         gameData->triggerList[gameData->triggerCount]=trigger;
                         gameData->triggerCount++;
@@ -84,11 +86,13 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                     gameData->map[y+1][x]=-1;
                     if(gameData->map[y][x]==8 &&(gameData->currentRoom->door&mask)!=0){
                         SDL_RenderCopyEx(rend,gameData->GroundSheet,&gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect,90,&p,SDL_FLIP_VERTICAL);
+                        trigger.doornum=0;
                         trigger.Rect.x+=32;
                         gameData->triggerList[gameData->triggerCount]=trigger;
                         gameData->triggerCount++;
                     }else if(gameData->map[y][x]==10&&(gameData->currentRoom->door&(mask<<2))!=0){
                         SDL_RenderCopyEx(rend,gameData->GroundSheet,&gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect,90,&p,SDL_FLIP_NONE);
+                        trigger.doornum=2;
                         trigger.Rect.x-=10;
                         gameData->triggerList[gameData->triggerCount]=trigger;
                         gameData->triggerCount++;

@@ -14,7 +14,7 @@
 void animate(Entity *entity, int state){
     //count slows the animation todo need to remove that and make it native to the rendering loop
     static int count =0;
-    if(count==5) {
+    if(count==3) {
         count=0;
         entity->cutter.y = (entity->cutter.h*state);
         entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)) );
@@ -29,7 +29,7 @@ void animateEntitys(GameData data){
     if(!*tracer){
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 6");
     }else {
-        if (count == 5) {
+        if (count == 3) {
             count = 0;
             while (*tracer) {
                 (*tracer)->item.cutter.y = ((*tracer)->item.cutter.h * (*tracer)->item.state);
@@ -63,6 +63,7 @@ void moveEntity(GameData data){
 
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
     GameData gameData;
     SDL_Window *win = SDL_CreateWindow("CGame",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,(mapsize*32),mapsize*32,SDL_WINDOW_OPENGL);
     SDL_GetWindowSize(win,&gameData.window_w,&gameData.window_h);
@@ -80,6 +81,8 @@ int main(int argc, char **argv) {
     SDL_Surface *s = IMG_Load(".\\Textures\\Floor.png");
     gameData.GroundSheet=SDL_CreateTextureFromSurface(rend,s);
     SDL_FreeSurface(s);
+    TTF_Font * font = TTF_OpenFont("arial.ttf", 25);
+    SDL_Color color = { 255, 255, 255 };
 
 /*    Entity new;
     new.ID=0;
@@ -107,6 +110,7 @@ int main(int argc, char **argv) {
     //inisalizing the list and loading in data
     LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
+
     gameData.start=NULL;
     gameData.currentRoom=initRooms();
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
@@ -142,8 +146,10 @@ int main(int argc, char **argv) {
         //creating next frame
         renderMapFromFile(rend,&gameData);
 
+
         SDL_RenderDrawRect(rend,&re);
-        renderTriggerBox(gameData,rend);
+        renderRoomCode(&gameData,rend,font,color);
+        renderTriggerBox(&gameData,rend);
         renderEntityBoxList(gameData,rend);
         renderEntitys(gameData,rend);
 
@@ -151,5 +157,10 @@ int main(int argc, char **argv) {
         SDL_RenderPresent(rend);
         animateEntitys(gameData);
     }
+
+    TTF_CloseFont(font);
+
+    TTF_Quit();
+    SDL_Quit();
     return 0;
 }

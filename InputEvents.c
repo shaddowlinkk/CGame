@@ -19,46 +19,46 @@ int linkEntityToUserInput(Entity *entity, GameData gameData){
     if((state[SDL_SCANCODE_DOWN]||state[SDL_SCANCODE_S])&&(state[SDL_SCANCODE_LEFT]||state[SDL_SCANCODE_A])){
         states=1;
         entity->state=1;
-        entity->velx = -1;
-        entity->vely = 1;
+        entity->velx = -2;
+        entity->vely = 2;
     }
     else if((state[SDL_SCANCODE_DOWN]||state[SDL_SCANCODE_S])&&(state[SDL_SCANCODE_RIGHT]||state[SDL_SCANCODE_D])){
         states=2;
         entity->state=2;
-        entity->velx = 1;
-        entity->vely = 1;
+        entity->velx = 2;
+        entity->vely = 2;
     }
     else if((state[SDL_SCANCODE_UP]||state[SDL_SCANCODE_W])&&(state[SDL_SCANCODE_LEFT]||state[SDL_SCANCODE_A])){
         states=1;
         entity->state=1;
-        entity->velx = -1;
-        entity->vely = -1;
+        entity->velx = -2;
+        entity->vely = -2;
     }
     else if((state[SDL_SCANCODE_UP]||state[SDL_SCANCODE_W])&&(state[SDL_SCANCODE_RIGHT]||state[SDL_SCANCODE_D])){
         states=2;
         entity->state=2;
-        entity->velx = 1;
-        entity->vely = -1;
+        entity->velx = 2;
+        entity->vely = -2;
     }
     else if(state[SDL_SCANCODE_UP]||state[SDL_SCANCODE_W]){
         states=4;
         entity->state=4;
-        entity->vely = -1;
+        entity->vely = -2;
     }
     else if(state[SDL_SCANCODE_DOWN]||state[SDL_SCANCODE_S]){
         states=3;
         entity->state=3;
-        entity->vely = 1;
+        entity->vely = 2;
     }
     else if(state[SDL_SCANCODE_LEFT]||state[SDL_SCANCODE_A]){
         states=1;
         entity->state=1;
-        entity->velx = -1;
+        entity->velx = -2;
     }
     else if(state[SDL_SCANCODE_RIGHT]||state[SDL_SCANCODE_D]){
         states=2;
         entity->state=2;
-        entity->velx = 1;
+        entity->velx = 2;
     }
     return states;
 }
