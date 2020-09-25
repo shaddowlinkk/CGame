@@ -2,7 +2,7 @@
 #include "GameCore.h"
 #include "MapRenderer.h"
 #include "InputEvents.h"
-#include "UtilRender.h"
+#include "Rendering.h"
 #include "LinkedList.h"
 #include "FileIO.h"
 //#include "CollisionDetection.h"

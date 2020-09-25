@@ -2,7 +2,7 @@
 // Created by nathan on 9/6/2020.
 //
 
-#include "UtilRender.h"
+#include "Rendering.h"
 #include "CollisionDetection.h"
 #include "LinkedList.h"
 #include <stdbool.h>
