@@ -61,7 +61,7 @@ Room *initRooms(){
     return new;
 }
 Room *enterRoom(int door,Room *inRoom){
-    if(inRoom->gened==0) {
+    if(inRoom->rooms[door]->gened==0) {
         genRoom(inRoom->rooms[door]);
     }
     return inRoom->rooms[door];

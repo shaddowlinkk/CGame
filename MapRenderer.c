@@ -29,7 +29,7 @@ void rendermap(SDL_Renderer *rend,GameData *gameData){
 }
 
 void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
-    // temp def of a tile
+    // todo re write to use facode texture
     MapTile ground;
     Trigger trigger;
     ground.tileRect.h=32;
