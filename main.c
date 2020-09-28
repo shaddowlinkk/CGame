@@ -144,13 +144,12 @@ int main(int argc, char **argv) {
 
         linkEntityToUserInput(Findnode(&gameData.start,0),gameData);
         bindEntitysToRect(gameData,re);
-        doorTiggerCollition(&gameData);
-
         moveEntity(gameData);
 
         //creating next frame
         renderMapFromFile(rend,&gameData);
 
+        doorTiggerCollition(&gameData);
 
         SDL_RenderDrawRect(rend,&re);
         renderRoomCode(&gameData,rend,font,color);
