@@ -13,6 +13,9 @@ include_directories(${SDL2_TTF_INCLUDE_DIR})
 include_directories(${SDL2_INCLUDE_DIRS})
 
 
-add_executable(CGame main.c MapRenderer.c InputEvents.c Rendering.c LinkedList.c FileIO.c Room.c CollisionDetection.c GameCore.h CollisionEvents.c CollisionEvents.h)
-
+add_executable(CGame main.c MapRenderer.c InputEvents.c Rendering.c LinkedList.c FileIO.c Room.c CollisionDetection.c GameCore.h CollisionEvents.c CollisionEvents.h Client.c Client.h)
+IF (WIN32)
+    find_library(WS2_32_LIBRARY ws2_32)
+    target_link_libraries(CGame ws2_32)
+endif()
 target_link_libraries(CGame ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY})

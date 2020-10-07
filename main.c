@@ -6,7 +6,9 @@
 #include "LinkedList.h"
 #include "FileIO.h"
 #include "CollisionEvents.h"
+#include "Client.h"
 //#include "CollisionDetection.h"
+
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
  * @param entity what ever entity you are trying to animate.
@@ -118,7 +120,15 @@ int main(int argc, char **argv) {
     gameData.currentRoom=initRooms();
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
 
-
+    EntityPacket current;
+    Entity *entity=Findnode(&gameData.start,0);
+    current.state=entity->state;
+    current.x=entity->sprite.x;
+    current.y=entity->sprite.y;
+    EntityPacket *data = updateEntity(current);
+    entity->state=data->state;
+    entity->sprite.x=data->x;
+    entity->sprite.y=data->y;
 
     SDL_RenderClear(rend);
     int running=1;
