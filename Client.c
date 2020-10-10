@@ -3,23 +3,7 @@
 //
 
 #include "Client.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <errno.h>
 
-#ifdef __WIN32
-#include <winsock2.h>
-#include <stdint.h>
-
-#else
-#include <sys/types.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#define INVALID_SOCKET -1
-#endif
 int msleep(long tms)
 {
     struct timespec ts;
@@ -40,57 +24,79 @@ int msleep(long tms)
 
     return ret;
 }
-EntityPacket *updateEntity(EntityPacket data) {
-#ifdef __WIN32
-    WSADATA wsa;
-    SOCKET server_sock, client_sock;
-    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
-        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"failed to init win socket\n");
-    } else {
-    }
-#else
-    int server_sock, client_sock;
-#endif
-    struct sockaddr_in servaddr, cli;
+int regClient(SOCKET server_sock, SOCKADDR_IN servaddr){
+/*    server_sock = socket(AF_INET, SOCK_STREAM, 0);
+    connect(server_sock, (struct sockaddr*)&servaddr, sizeof(servaddr));*/
 
-    // socket create and varification
-    server_sock = socket(AF_INET, SOCK_DGRAM, 0);
-    if (server_sock == -1) {
-        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"socket creation failed...\n");
-        exit(0);
-    } else
 
-        // assign IP, PORT
-        servaddr.sin_family = AF_INET;
-        servaddr.sin_addr.s_addr = inet_addr("192.168.50.2");
-        servaddr.sin_port = htons(8080);
-    EntityPacket  *updatedData =malloc(sizeof(EntityPacket));
+    uint32_t msg = htonl(0);
+    uint32_t ou;
+    send(server_sock, (char *)&msg, sizeof(uint32_t), 0);
+    int len = sizeof(servaddr);
+    recv(server_sock, &ou, sizeof(uint32_t), 0);
+    int out = ntohl(ou);
+
+
+/*    ou = htonl(-1);
+    send(server_sock, &ou, sizeof(uint32_t), 0);
+    shutdown(server_sock,SD_BOTH);*/
+    return out;
+}
+void updateEntity(EntityPacket data,SOCKET server_sock, SOCKADDR_IN servaddr,int id) {
+/*    server_sock = socket(AF_INET, SOCK_STREAM, 0);
+    connect(server_sock, (struct sockaddr*)&servaddr, sizeof(servaddr));*/
 
     uint32_t msg = htonl(1);
-    uint32_t ou;
-    int len = sizeof(servaddr);
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"%i:%i:%i:\n",data.x,data.y,data.state);
-    sendto(server_sock, (char *)&msg, sizeof(uint32_t), 0, (struct sockaddr *) &servaddr, sizeof(servaddr));
-
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"%i:%i:%i:\n",data.x,data.y,data.state);
+    send(server_sock, (char *)&msg, sizeof(uint32_t), 0);
+    msg = htonl(id);
+    send(server_sock, (char *)&msg, sizeof(uint32_t), 0);
     msg = htonl(data.x);
-    sendto(server_sock, &msg, sizeof(uint32_t), 0, (struct sockaddr *) &servaddr, sizeof(servaddr));
+    send(server_sock, &msg, sizeof(uint32_t), 0);
 
     msg = htonl(data.y);
-    sendto(server_sock, &msg, sizeof(uint32_t), 0, (struct sockaddr *) &servaddr, sizeof(servaddr));
+    send(server_sock, &msg, sizeof(uint32_t), 0);
 
     msg = htonl(data.state);
-    sendto(server_sock, &msg, sizeof(uint32_t), 0, (struct sockaddr *) &servaddr, sizeof(servaddr));
+    send(server_sock, &msg, sizeof(uint32_t), 0);
 
-    recvfrom(server_sock, &ou, sizeof(uint32_t), 0, (struct sockaddr *) &servaddr, &len);
-    updatedData->x=ntohl(ou);
 
-    recvfrom(server_sock, &ou, sizeof(uint32_t), 0, (struct sockaddr *) &servaddr, &len);
-    updatedData->y=ntohl(ou);
+/*    uint32_t ou = htonl(-1);
+    send(server_sock, &ou, sizeof(uint32_t), 0);
+    shutdown(server_sock,SD_BOTH);*/
 
-    recvfrom(server_sock, &ou, sizeof(uint32_t), 0, (struct sockaddr *) &servaddr, &len);
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"%x:\n",ou);
-    updatedData->state=ntohl(ou);
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"%i:%i:%i:\n",updatedData->x,updatedData->y,updatedData->state);
-    return updatedData;
+}
+
+EntityPacket *getUpdate(SOCKET server_sock, SOCKADDR_IN servaddr,int id) {
+/*    server_sock = socket(AF_INET, SOCK_STREAM, 0);
+    connect(server_sock, (struct sockaddr*)&servaddr, sizeof(servaddr));*/
+
+    EntityPacket *updatedData = malloc(sizeof(EntityPacket));
+
+    uint32_t msg = htonl(2);
+    uint32_t ou;
+    int len = sizeof(servaddr);
+    int playerNum;
+    send(server_sock, (char *) &msg, sizeof(uint32_t), 0);
+    msg = htonl(id);
+    send(server_sock, (char *) &msg, sizeof(uint32_t), 0);
+
+    recv(server_sock, &ou, sizeof(uint32_t), 0);
+    playerNum = ntohl(ou);
+    if (playerNum >= 2) {
+        recv(server_sock, &ou, sizeof(uint32_t), 0);
+        updatedData->x = ntohl(ou);
+
+        recv(server_sock, &ou, sizeof(uint32_t), 0);
+        updatedData->y = ntohl(ou);
+
+        recv(server_sock, &ou, sizeof(uint32_t), 0);
+        updatedData->state = ntohl(ou);
+        return updatedData;
+    }
+
+
+/*    ou = htonl(-1);
+    send(server_sock, &ou, sizeof(uint32_t), 0);
+    shutdown(server_sock,SD_BOTH);*/
+    return NULL;
 }

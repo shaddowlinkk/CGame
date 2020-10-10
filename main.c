@@ -7,6 +7,7 @@
 #include "FileIO.h"
 #include "CollisionEvents.h"
 #include "Client.h"
+#include <windows.h>
 //#include "CollisionDetection.h"
 
 /**
@@ -89,6 +90,30 @@ int main(int argc, char **argv) {
     TTF_Font * font = TTF_OpenFont("arial.ttf", 25);
     SDL_Color color = { 255, 255, 255 };
 
+#ifdef __WIN32
+    WSADATA wsa;
+    SOCKET server_sock, client_sock;
+    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"failed to init win socket\n");
+    } else {
+    }
+#else
+    int server_sock, client_sock;
+#endif
+    struct sockaddr_in servaddr, cli;
+
+    // socket create and varification
+    server_sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if (server_sock == -1) {
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"socket creation failed...\n");
+        exit(0);
+    }
+
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = inet_addr("192.168.50.2");
+    servaddr.sin_port = htons(8080);
+    server_sock = socket(AF_INET, SOCK_STREAM, 0);
+    connect(server_sock, (struct sockaddr*)&servaddr, sizeof(servaddr));
 /*    Entity new;
     new.ID=0;
     new.spriteSheet=tex;
@@ -118,17 +143,16 @@ int main(int argc, char **argv) {
 
     gameData.start=NULL;
     gameData.currentRoom=initRooms();
-    Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
-
+    Entity player= readEntityFromFile("play.ent",rend);
+    player.ID=0;
+    Insertnode(&gameData.start,NewElement(player));
+    Entity other=readEntityFromFile("play.ent",rend);
+    other.ID=1;
     EntityPacket current;
     Entity *entity=Findnode(&gameData.start,0);
-    current.state=entity->state;
-    current.x=entity->sprite.x;
-    current.y=entity->sprite.y;
-    EntityPacket *data = updateEntity(current);
-    entity->state=data->state;
-    entity->sprite.x=data->x;
-    entity->sprite.y=data->y;
+    Entity *player2;
+    int id = regClient(server_sock,servaddr);
+    int flag=0;
 
     SDL_RenderClear(rend);
     int running=1;
@@ -138,6 +162,7 @@ int main(int argc, char **argv) {
         // Process events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
+                shutdown(server_sock,SD_BOTH);
                 running = 0;
             }
         }
@@ -156,6 +181,22 @@ int main(int argc, char **argv) {
         bindEntitysToRect(gameData,re);
         moveEntity(gameData);
 
+        current.state=entity->state;
+        current.x=entity->sprite.x;
+        current.y=entity->sprite.y;
+        updateEntity(current,server_sock,servaddr,id);
+        EntityPacket *data =getUpdate(server_sock,servaddr,id);
+        if(data!=NULL && flag==0){
+            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"got in here some how");
+            Insertnode(&gameData.start,NewElement(other));
+            player2=Findnode(&gameData.start,1);
+            flag=1;
+        }
+        if(data!=NULL && flag==1){
+            player2->state=data->state;
+            player2->sprite.x=data->x;
+            player2->sprite.y=data->y;
+        }
         //creating next frame
         renderMapFromFile(rend,&gameData);
 
