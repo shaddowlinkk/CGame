@@ -148,7 +148,6 @@ int main(int argc, char **argv) {
     Insertnode(&gameData.start,NewElement(player));
     Entity other=readEntityFromFile("play.ent",rend);
     other.ID=1;
-    EntityPacket current;
     Entity *entity=Findnode(&gameData.start,0);
     Entity *player2;
     int flag=0;
@@ -180,9 +179,6 @@ int main(int argc, char **argv) {
         bindEntitysToRect(gameData,re);
         moveEntity(gameData);
 
-        current.state=entity->state;
-        current.x=entity->sprite.x;
-        current.y=entity->sprite.y;
         //creating next frame
         renderMapFromFile(rend,&gameData);
 
