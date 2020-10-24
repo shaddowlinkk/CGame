@@ -14,6 +14,7 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 
 add_executable(CGame main.c MapRenderer.c InputEvents.c Rendering.c LinkedList.c FileIO.c Room.c CollisionDetection.c GameCore.h CollisionEvents.c CollisionEvents.h Client.c Client.h)
+find_package( Threads )
 IF (WIN32)
     find_library(WS2_32_LIBRARY ws2_32)
     target_link_libraries(CGame ws2_32)

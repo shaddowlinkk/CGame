@@ -7,7 +7,7 @@
 #include "FileIO.h"
 #include "CollisionEvents.h"
 #include "Client.h"
-#include <windows.h>
+
 //#include "CollisionDetection.h"
 
 /**
@@ -151,7 +151,6 @@ int main(int argc, char **argv) {
     EntityPacket current;
     Entity *entity=Findnode(&gameData.start,0);
     Entity *player2;
-    int id = regClient(server_sock,servaddr);
     int flag=0;
 
     SDL_RenderClear(rend);
@@ -184,19 +183,6 @@ int main(int argc, char **argv) {
         current.state=entity->state;
         current.x=entity->sprite.x;
         current.y=entity->sprite.y;
-        updateEntity(current,server_sock,servaddr,id);
-        EntityPacket *data =getUpdate(server_sock,servaddr,id);
-        if(data!=NULL && flag==0){
-            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"got in here some how");
-            Insertnode(&gameData.start,NewElement(other));
-            player2=Findnode(&gameData.start,1);
-            flag=1;
-        }
-        if(data!=NULL && flag==1){
-            player2->state=data->state;
-            player2->sprite.x=data->x;
-            player2->sprite.y=data->y;
-        }
         //creating next frame
         renderMapFromFile(rend,&gameData);
 

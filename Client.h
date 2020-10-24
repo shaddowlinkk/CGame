@@ -26,14 +26,5 @@
 typedef struct _packet{
     uint32_t state,x,y,ID;
 }EntityPacket;
-typedef struct _serverdata {
-    EntityPacket data;
-    SOCKET server_sock;
-    SOCKADDR_IN servaddr;
-    int id;
-}serverData;
-void updateEntity(EntityPacket data,SOCKET server_sock, SOCKADDR_IN servaddr,int id);
-EntityPacket *getUpdate(SOCKET server_sock, SOCKADDR_IN servaddr,int id);
-int regClient(SOCKET server_sock, SOCKADDR_IN servaddr);
 
 #endif //CGAME_CLIENT_H
