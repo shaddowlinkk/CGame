@@ -14,12 +14,12 @@
 #include <winsock2.h>
 #include <stdint.h>
 #else
-#include <sys/types.h>
+/*#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include <unistd.h>
+#include <unistd.h>*/
 #endif
 
 typedef struct _packet{

@@ -6,7 +6,6 @@
 #include "LinkedList.h"
 #include "FileIO.h"
 #include "CollisionEvents.h"
-#include "Client.h"
 #include "net_utils.h"
 
 //#include "CollisionDetection.h"
