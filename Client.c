@@ -4,7 +4,6 @@
 
 #include "Client.h"
 #include <time.h>
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 int msleep(long tms)
 {
     struct timespec ts;

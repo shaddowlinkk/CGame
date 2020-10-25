@@ -7,6 +7,7 @@
 #include "FileIO.h"
 #include "CollisionEvents.h"
 #include "Client.h"
+#include "net_utils.h"
 
 //#include "CollisionDetection.h"
 
@@ -110,7 +111,7 @@ int main(int argc, char **argv) {
     }
 
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("192.168.50.2");
+    servaddr.sin_addr.s_addr = inet_addr("24.49.8.41");
     servaddr.sin_port = htons(8080);
     server_sock = socket(AF_INET, SOCK_STREAM, 0);
     connect(server_sock, (struct sockaddr*)&servaddr, sizeof(servaddr));
@@ -140,6 +141,10 @@ int main(int argc, char **argv) {
     //inisalizing the list and loading in data
     LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
+    EntityPacket tmp;
+    char msgfromserver[MAXLINE];
+    char *msg =msgfromserver;
+    sendCode(REG,server_sock);
 
     gameData.start=NULL;
     gameData.currentRoom=initRooms();
@@ -156,11 +161,11 @@ int main(int argc, char **argv) {
     int running=1;
     SDL_Event event;
     while(running) {
-        int states=0;
+        int states = 0;
         // Process events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
-                shutdown(server_sock,SD_BOTH);
+                shutdown(server_sock, SD_BOTH);
                 running = 0;
             }
         }
@@ -169,16 +174,50 @@ int main(int argc, char **argv) {
 
         //game logic
         SDL_Rect re;
-        re.w=gameData.window_w-64;
-        re.h=gameData.window_h-64;
-        re.x=32;
-        re.y=32;
+        re.w = gameData.window_w - 64;
+        re.h = gameData.window_h - 64;
+        re.x = 32;
+        re.y = 32;
 
 
-        linkEntityToUserInput(Findnode(&gameData.start,0),gameData);
-        bindEntitysToRect(gameData,re);
+        linkEntityToUserInput(Findnode(&gameData.start, 0), gameData);
+        bindEntitysToRect(gameData, re);
         moveEntity(gameData);
 
+        tmp.x = entity->sprite.x;
+        tmp.y = entity->sprite.y;
+        tmp.state = entity->state;
+        tmp.ID = 100;
+        sendPacket(SUPPLY_UPDATE, &tmp, server_sock);
+        if (flag == 0) {
+            sendCode(REQUEST_PCOUNT, server_sock);
+            recevMsg(server_sock,msgfromserver);
+            if (extract_msg_code(&msg) == 12) {
+                if (getpcount() >= 2) {
+                    Insertnode(&gameData.start,NewElement(other));
+                    player2=Findnode(&gameData.start,1);
+                    sendCode(REQUEST_UPDATE,server_sock);
+                    recevMsg(server_sock,msgfromserver);
+                    extract_msg_code(&msg);
+                    decodePacket(&tmp);
+                    player2->sprite.x=tmp.x;
+                    player2->sprite.y=tmp.y;
+                    player2->state=tmp.state;
+                    player2->ID=1;
+                    flag=1;
+                }
+            }
+        }else{
+            sendCode(REQUEST_UPDATE,server_sock);
+            recevMsg(server_sock,msgfromserver);
+            extract_msg_code(&msg);
+            decodePacket(&tmp);
+            player2->sprite.x=tmp.x;
+            player2->sprite.y=tmp.y;
+            player2->state=tmp.state;
+            player2->ID=1;
+            flag=1;
+        }
         //creating next frame
         renderMapFromFile(rend,&gameData);
 

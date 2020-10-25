@@ -10,7 +10,7 @@
 #include <time.h>
 #include <errno.h>
 
-#ifdef __WIN32
+#ifdef __WIN64
 #include <winsock2.h>
 #include <stdint.h>
 
@@ -23,8 +23,7 @@
 #define INVALID_SOCKET -1
 #endif
 
-typedef struct _packet{
-    uint32_t state,x,y,ID;
-}EntityPacket;
+
+
 
 #endif //CGAME_CLIENT_H
