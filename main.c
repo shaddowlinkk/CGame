@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
     TTF_Font * font = TTF_OpenFont("arial.ttf", 25);
     SDL_Color color = { 255, 255, 255 };
 
-#ifdef __WIN32
+#ifdef __WIN64
     WSADATA wsa;
     SOCKET server_sock, client_sock;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
