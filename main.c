@@ -15,14 +15,10 @@
  * @param state the animation state that corresponds to the action you are trying to animate
  */
 void animate(Entity *entity, int state){
-    //count slows the animation todo need to remove that and make it native to the rendering loop
-    static int count =0;
-    if(count==3) {
-        count=0;
+    // todo need to remove that and make it native to the rendering loop
         entity->cutter.y = (entity->cutter.h*state);
-        entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)) );
-    }
-    count++;
+        entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)));
+
 }
 
 void animateEntitys(GameData *data){
@@ -35,8 +31,7 @@ void animateEntitys(GameData *data){
         if (count == 3) {
             count = 0;
             while (*tracer) {
-                (*tracer)->item.cutter.y = ((*tracer)->item.cutter.h * (*tracer)->item.state);
-                (*tracer)->item.cutter.x = ((*tracer)->item.cutter.w * ((((*tracer)->item.cutter.x / (*tracer)->item.cutter.w) + 1) % ((*tracer)->item.animationStates[(*tracer)->item.state] - 1)));
+                animate(&(*tracer)->item,(*tracer)->item.state);
                 tracer = &(*tracer)->next;
             }
 
