@@ -155,11 +155,13 @@ int main(int argc, char **argv) {
     Entity *entity=Findnode(&gameData.start,0);
     Entity *player2;
     int flag=0;
-
+    clock_t start, end;
+    double cpu_time_used=0.0;
     SDL_RenderClear(rend);
     int running=1;
     SDL_Event event;
     while(running) {
+        start=clock();
         int states = 0;
         // Process events
         while (SDL_PollEvent(&event)) {
@@ -187,50 +189,54 @@ int main(int argc, char **argv) {
         tmp.y = entity->sprite.y;
         tmp.state = entity->state;
         tmp.ID = 100;
-        sendPacket(SUPPLY_UPDATE, &tmp, server_sock);
-        if (flag == 0) {
-            sendCode(REQUEST_PCOUNT, server_sock);
-            recevMsg(server_sock,msgfromserver);
-            if (extract_msg_code(&msg) == 12) {
-                if (getpcount() >= 2) {
-                    Insertnode(&gameData.start,NewElement(other));
-                    player2=Findnode(&gameData.start,1);
-                    sendCode(REQUEST_UPDATE,server_sock);
-                    recevMsg(server_sock,msgfromserver);
-                    extract_msg_code(&msg);
-                    decodePacket(&tmp);
-                    player2->sprite.x=tmp.x;
-                    player2->sprite.y=tmp.y;
-                    player2->state=tmp.state;
-                    player2->ID=1;
-                    flag=1;
+        if(cpu_time_used>=.05) {
+            sendPacket(SUPPLY_UPDATE, &tmp, server_sock);
+            if (flag == 0) {
+                sendCode(REQUEST_PCOUNT, server_sock);
+                recevMsg(server_sock, msgfromserver);
+                if (extract_msg_code(&msg) == 12) {
+                    if (getpcount() >= 2) {
+                        Insertnode(&gameData.start, NewElement(other));
+                        player2 = Findnode(&gameData.start, 1);
+                        sendCode(REQUEST_UPDATE, server_sock);
+                        recevMsg(server_sock, msgfromserver);
+                        extract_msg_code(&msg);
+                        decodePacket(&tmp);
+                        player2->sprite.x = tmp.x;
+                        player2->sprite.y = tmp.y;
+                        player2->state = tmp.state;
+                        player2->ID = 1;
+                        flag = 1;
+                    }
                 }
+            } else {
+                sendCode(REQUEST_UPDATE, server_sock);
+                recevMsg(server_sock, msgfromserver);
+                extract_msg_code(&msg);
+                decodePacket(&tmp);
+                player2->sprite.x = tmp.x;
+                player2->sprite.y = tmp.y;
+                player2->state = tmp.state;
+                player2->ID = 1;
+                flag = 1;
             }
-        }else{
-            sendCode(REQUEST_UPDATE,server_sock);
-            recevMsg(server_sock,msgfromserver);
-            extract_msg_code(&msg);
-            decodePacket(&tmp);
-            player2->sprite.x=tmp.x;
-            player2->sprite.y=tmp.y;
-            player2->state=tmp.state;
-            player2->ID=1;
-            flag=1;
         }
         //creating next frame
         renderMapFromFile(rend,&gameData);
 
         doorTiggerCollition(&gameData);
 
-        SDL_RenderDrawRect(rend,&re);
-        renderRoomCode(&gameData,rend,font,color);
-        renderTriggerBox(&gameData,rend);
-        renderEntityBoxList(gameData,rend);
+        //SDL_RenderDrawRect(rend,&re);
+        //renderRoomCode(&gameData,rend,font,color);
+        //renderTriggerBox(&gameData,rend);
+        //renderEntityBoxList(gameData,rend);
         renderEntitys(gameData,rend);
 
         //present to screeen
         SDL_RenderPresent(rend);
         animateEntitys(gameData);
+        end = clock();
+        cpu_time_used += ((double) (end - start)) / CLOCKS_PER_SEC;
     }
 
     TTF_CloseFont(font);
