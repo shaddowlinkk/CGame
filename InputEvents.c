@@ -9,7 +9,7 @@
  * @param gameData current states of global data
  * @return returns the input state that what found
  */
-int linkEntityToUserInput(Entity *entity, GameData gameData){
+int linkEntityToUserInput(Entity *entity, GameData *gameData){
     int states=0;
     entity->state=0;
     entity->vely=0;
@@ -122,8 +122,8 @@ void bindEntitysToBoard(GameData data){
     }
 }
 
-void bindEntitysToRect(GameData data, SDL_Rect rect){
-    node **tracer = &data.start;
+void bindEntitysToRect(GameData *data, SDL_Rect rect){
+    node **tracer = &data->start;
     if(!*tracer){
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 4");
     }else {

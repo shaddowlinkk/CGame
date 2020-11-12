@@ -14,8 +14,8 @@ void renderTriggerBox(GameData *data, SDL_Renderer *rend){
           SDL_RenderDrawRect(rend, &data->triggerList[i].Rect);
     }
 }
-void renderEntityBoxList(GameData data, SDL_Renderer *rend){
-    node **tracer = &data.start;
+void renderEntityBoxList(GameData *data, SDL_Renderer *rend){
+    node **tracer = &data->start;
     if(!*tracer){
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 1");
     }else {
@@ -26,8 +26,8 @@ void renderEntityBoxList(GameData data, SDL_Renderer *rend){
     }
 }
 
-void renderEntitys(GameData data, SDL_Renderer *rend){
-    node **tracer = &data.start;
+void renderEntitys(GameData *data, SDL_Renderer *rend){
+    node **tracer = &data->start;
     if(!*tracer){
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 2");
     }else {

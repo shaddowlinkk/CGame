@@ -23,10 +23,10 @@ void animate(Entity *entity, int state){
     count++;
 }
 
-void animateEntitys(GameData data){
+void animateEntitys(GameData *data){
     //count slows the animation todo need to remove that and make it native to the rendering loop
     static int count =0;
-    node **tracer = &data.start;
+    node **tracer = &data->start;
     if(!*tracer){
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 6");
     }else {
@@ -47,8 +47,8 @@ void animateEntitys(GameData data){
  * moves an entity based on velocity
  * @param entity the entity that you want to move
  */
-void moveEntity(GameData data){
-    node **tracer = &data.start;
+void moveEntity(GameData *data){
+    node **tracer = &data->start;
     if(!*tracer){
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 3");
     }else {
@@ -111,6 +111,24 @@ int main(int argc, char **argv) {
     //writeToFile(&new);
 
     //inisalizing the list and loading in data
+    SDL_Surface  *surface = IMG_Load(".\\Textures\\inv.png");
+    SDL_Texture *tex = SDL_CreateTextureFromSurface(rend,surface);
+    SDL_FreeSurface(surface);
+
+    Entity inv;
+    inv.cutter.x=0;
+    inv.cutter.y=0;
+    inv.cutter.w=172;
+    inv.cutter.h=60;
+    inv.sprite.w=172;
+    inv.sprite.h=60;
+    inv.sprite.x=32;
+    inv.sprite.y=32;
+    inv.spriteSheet=tex;
+    inv.state=0;
+
+    gameData.inventory=inv;
+
     LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
 
@@ -129,6 +147,10 @@ int main(int argc, char **argv) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = 0;
+            }else if (event.type == SDL_KEYDOWN){
+                if(event.key.keysym.scancode==SDL_SCANCODE_F2){
+                    gameData.inventory.state= ((gameData.inventory.state+1)%2);
+                }
             }
         }
         // clear old frame
@@ -142,9 +164,9 @@ int main(int argc, char **argv) {
         re.y=32;
 
 
-        linkEntityToUserInput(Findnode(&gameData.start,0),gameData);
-        bindEntitysToRect(gameData,re);
-        moveEntity(gameData);
+        linkEntityToUserInput(Findnode(&gameData.start,0),&gameData);
+        bindEntitysToRect(&gameData,re);
+        moveEntity(&gameData);
 
         //creating next frame
         renderMapFromFile(rend,&gameData);
@@ -154,12 +176,18 @@ int main(int argc, char **argv) {
         SDL_RenderDrawRect(rend,&re);
         renderRoomCode(&gameData,rend,font,color);
         renderTriggerBox(&gameData,rend);
-        renderEntityBoxList(gameData,rend);
-        renderEntitys(gameData,rend);
+        renderEntityBoxList(&gameData,rend);
+        renderEntitys(&gameData,rend);
+        if (gameData.inventory.state!=0){
+            Entity *temp = Findnode(&gameData.start,0);
+            gameData.inventory.sprite.x=temp->sprite.x-(172/2)+(temp->cutter.w/2);
+            gameData.inventory.sprite.y=temp->sprite.y-(60);
+            SDL_RenderCopy(rend,gameData.inventory.spriteSheet,&gameData.inventory.cutter,&gameData.inventory.sprite);
+        }
 
         //present to screeen
         SDL_RenderPresent(rend);
-        animateEntitys(gameData);
+        animateEntitys(&gameData);
     }
 
     TTF_CloseFont(font);

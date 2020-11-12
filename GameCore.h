@@ -46,6 +46,7 @@ typedef struct _CoreGameData{
     SDL_Texture *GroundSheet;
     Trigger triggerList[20];
     node *start;
+    Entity inventory;
     int triggerCount;
     MapTile Tiles[100];
     int window_h,window_w;
