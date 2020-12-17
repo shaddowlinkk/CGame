@@ -6,6 +6,8 @@
 #include "LinkedList.h"
 #include "FileIO.h"
 #include "CollisionEvents.h"
+#include "BoundingboxUtil.h"
+#include "Room.h"
 //#include "CollisionDetection.h"
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
@@ -87,31 +89,10 @@ int main(int argc, char **argv) {
     TTF_Font * font = TTF_OpenFont("arial.ttf", 25);
     SDL_Color color = { 255, 255, 255 };
 
-/*    Entity new;
-    new.ID=0;
-    new.spriteSheet=tex;
-    new.sprite.h=32;
-    new.sprite.w=16;
-    new.cutter.h=32;
-    new.cutter.w=16;
-    new.cutter.x=0;
-    new.cutter.y=0;
-    new.sprite.x=gameData.window_w/2;
-    new.sprite.y=gameData.window_h/2;
-    new.animationStates[0]=7;
-    new.animationStates[1]=11;
-    new.animationStates[2]=11;
-    new.animationStates[3]=8;
-    new.animationStates[4]=9;
-    new.animationStates[5]=16;
-    memset(new.textureName,0x00,sizeof(20));
-    strcpy(new.textureName,"test.png");*/
 
-
-    //writeToFile(&new);
 
     //inisalizing the list and loading in data
-    SDL_Surface  *surface = IMG_Load(".\\Textures\\inv.png");
+    /*SDL_Surface  *surface = IMG_Load(".\\Textures\\inv.png");
     SDL_Texture *tex = SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
 
@@ -125,9 +106,13 @@ int main(int argc, char **argv) {
     inv.sprite.x=32;
     inv.sprite.y=32;
     inv.spriteSheet=tex;
+    memset(inv.textureName,0x00,sizeof(20));
+    strcpy(inv.textureName,"inv.png");
     inv.state=0;
+    writeEntityToFile("inv.ent",&inv);*/
 
-    gameData.inventory=inv;
+
+    gameData.inventory=readEntityFromFile("inv.ent",rend);
 
     LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
@@ -135,8 +120,9 @@ int main(int argc, char **argv) {
     gameData.start=NULL;
     gameData.currentRoom=initRooms();
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
-
-
+    BoundingBox testBox = initBoundingBox(100,100,20,10);
+    BoundingBox originBox = initBoundingBox(100,100,20,10);
+    int count=0;
 
     SDL_RenderClear(rend);
     int running=1;
@@ -150,6 +136,10 @@ int main(int argc, char **argv) {
             }else if (event.type == SDL_KEYDOWN){
                 if(event.key.keysym.scancode==SDL_SCANCODE_F2){
                     gameData.inventory.state= ((gameData.inventory.state+1)%2);
+                }
+                if(event.key.keysym.scancode==SDL_SCANCODE_F3){
+                    count+=5;
+                    testBox=rotateBoundingBox(originBox,count);
                 }
             }
         }
@@ -178,6 +168,7 @@ int main(int argc, char **argv) {
         renderTriggerBox(&gameData,rend);
         renderEntityBoxList(&gameData,rend);
         renderEntitys(&gameData,rend);
+
         if (gameData.inventory.state!=0){
             Entity *temp = Findnode(&gameData.start,0);
             gameData.inventory.sprite.x=temp->sprite.x-(172/2)+(temp->cutter.w/2);
@@ -186,6 +177,7 @@ int main(int argc, char **argv) {
         }
 
         //present to screeen
+        renderBoundingBox(&testBox,rend);
         SDL_RenderPresent(rend);
         animateEntitys(&gameData);
     }

@@ -5,7 +5,7 @@
 #include "CollisionEvents.h"
 #include "LinkedList.h"
 #include "CollisionDetection.h"
-#include <stdbool.h>
+#include "Room.h"
 
 void doorTiggerCollition(GameData *data){
     for (int i = 0; i < data->triggerCount; i++) {

@@ -8,10 +8,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "Room.h"
+
 #define mapsize 22
 
-
+typedef struct _boundingBox{
+    SDL_Point coords[4];
+    struct SDL_Point center;
+}BoundingBox;
 
 typedef struct _Entity{
     int ID;
@@ -34,6 +37,15 @@ typedef struct _node
     Entity item;
     struct _node *next;
 } node;
+
+typedef struct _room{
+    unsigned int door:4;
+    char *mapName;
+    node *items;
+    node *mobs;
+    struct _room *rooms[4];
+    int gened:1;
+}Room;
 
 typedef struct _MapTile{
     SDL_Texture *tileTexture;

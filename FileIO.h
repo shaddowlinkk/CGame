@@ -5,7 +5,7 @@
 #include "GameCore.h"
 #ifndef CGAME_FILEIO_H
 #define CGAME_FILEIO_H
-void writeToFile(char *name,Entity *entity);
+void writeEntityToFile(char *name,Entity *entity);
 Entity readEntityFromFile(char *name,SDL_Renderer *rend);
 void LoadMapFile(char *name,GameData *data);
 void LoadTileData(GameData *data);

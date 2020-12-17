@@ -3,6 +3,7 @@
 //
 
 #include "Rendering.h"
+#include <stdio.h>
 /**
  * renderd the SDL RECT that defines how an entity is renders
  * @param data the game state
@@ -50,4 +51,12 @@ void renderRoomCode(GameData *data, SDL_Renderer *rend,TTF_Font *font, SDL_Color
     SDL_Rect dstrect = { 0, 0, 256,32 };
     SDL_RenderCopy(rend,texture,NULL,&dstrect);
     SDL_DestroyTexture(texture);
+}
+
+void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend){
+    SDL_SetRenderDrawColor(rend, 0x00, 0x00, 0x00, 0xFF);
+    SDL_RenderDrawLines(rend,box->coords,4);
+    SDL_SetRenderDrawColor(rend, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderDrawPoint(rend,box->center.x,box->center.y);
+    SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
 }

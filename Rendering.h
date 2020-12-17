@@ -9,4 +9,5 @@ void renderTriggerBox(GameData *data, SDL_Renderer *rend);
 void renderEntityBoxList(GameData *data, SDL_Renderer *rend);
 void renderEntitys(GameData *data, SDL_Renderer *rend);
 void renderRoomCode(GameData *data, SDL_Renderer *rend,TTF_Font *font, SDL_Color color);
+void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend);
 #endif //CGAME_UTILRENDER_H
