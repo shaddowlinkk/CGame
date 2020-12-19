@@ -12,7 +12,9 @@
 #define mapsize 22
 
 typedef struct _boundingBox{
+    int h,w,degree;
     SDL_Point coords[4];
+    SDL_Point originCoords[4];
     struct SDL_Point center;
 }BoundingBox;
 

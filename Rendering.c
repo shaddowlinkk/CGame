@@ -54,8 +54,14 @@ void renderRoomCode(GameData *data, SDL_Renderer *rend,TTF_Font *font, SDL_Color
 }
 
 void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend){
+    SDL_Point rect[5];
+    rect[0]=box->coords[0];
+    rect[1]=box->coords[1];
+    rect[2]=box->coords[3];
+    rect[3]=box->coords[2];
+    rect[4]=box->coords[0];
     SDL_SetRenderDrawColor(rend, 0x00, 0x00, 0x00, 0xFF);
-    SDL_RenderDrawLines(rend,box->coords,4);
+    SDL_RenderDrawLines(rend,rect,5);
     SDL_SetRenderDrawColor(rend, 0xFF, 0x00, 0x00, 0xFF);
     SDL_RenderDrawPoint(rend,box->center.x,box->center.y);
     SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);

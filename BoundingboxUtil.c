@@ -14,25 +14,52 @@ SDL_Point pointRotation(SDL_Point center,SDL_Point point, int degree) {
     return out;
 }
 
-BoundingBox rotateBoundingBox(BoundingBox box,int degree){
-    box.coords[0]=pointRotation(box.center,box.coords[0],degree);
-    box.coords[1]=pointRotation(box.center,box.coords[1],degree);
-    box.coords[2]=pointRotation(box.center,box.coords[2],degree);
-    box.coords[3]=pointRotation(box.center,box.coords[3],degree);
-    return box;
+void rotateBoundingBox(BoundingBox *box,int degree){
+    box->coords[0]=pointRotation(box->center,box->originCoords[0],degree);
+    box->coords[1]=pointRotation(box->center,box->originCoords[1],degree);
+    box->coords[2]=pointRotation(box->center,box->originCoords[2],degree);
+    box->coords[3]=pointRotation(box->center,box->originCoords[3],degree);
+    box->degree=degree;
+
 }
 
 BoundingBox initBoundingBox(int x, int y , int h , int w){
     BoundingBox outBox;
     SDL_Point coord;coord.x=x;coord.y=y;
+    outBox.h=h;outBox.w=w,outBox.degree=0;
     outBox.coords[0] = coord;
+    outBox.originCoords[0] = coord;
     coord.x+=w;
     outBox.coords[1] = coord;
+    outBox.originCoords[1] = coord;
     coord.y+=h;
     outBox.coords[3] = coord;
+    outBox.originCoords[3] = coord;
     coord.x=x;
     outBox.coords[2] = coord;
+    outBox.originCoords[2] = coord;
     coord.x=x+(w/2);coord.y=y+(h/2);
     outBox.center=coord;
     return outBox;
+}
+
+void setBoundingBox(BoundingBox *outBox,int x,int y){
+
+    SDL_Point coord;coord.x=x;coord.y=y;
+    int h=outBox->h,w=outBox->w;
+    outBox->coords[0] = coord;
+    outBox->originCoords[0] = coord;
+    coord.x+=w;
+    outBox->coords[1] = coord;
+    outBox->originCoords[1] = coord;
+    coord.y+=h;
+    outBox->coords[3] = coord;
+    outBox->originCoords[3] = coord;
+    coord.x=x;
+    outBox->coords[2] = coord;
+    outBox->originCoords[2] = coord;
+    coord.x=x+(w/2);coord.y=y+(h/2);
+    outBox->center=coord;
+    rotateBoundingBox(outBox,outBox->degree);
+
 }

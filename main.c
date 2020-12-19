@@ -8,7 +8,7 @@
 #include "CollisionEvents.h"
 #include "BoundingboxUtil.h"
 #include "Room.h"
-//#include "CollisionDetection.h"
+#include "CollisionDetection.h"
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
  * @param entity what ever entity you are trying to animate.
@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
     gameData.currentRoom=initRooms();
     Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
     BoundingBox testBox = initBoundingBox(100,100,20,10);
-    BoundingBox originBox = initBoundingBox(100,100,20,10);
+    BoundingBox test2Box = initBoundingBox(200,100,20,10);
     int count=0;
 
     SDL_RenderClear(rend);
@@ -134,7 +134,10 @@ int main(int argc, char **argv) {
                 }
                 if(event.key.keysym.scancode==SDL_SCANCODE_F3){
                     count+=5;
-                    testBox=rotateBoundingBox(originBox,count);
+                    rotateBoundingBox(&testBox,count);
+                }
+                if(event.key.keysym.scancode==SDL_SCANCODE_F4){
+                    setBoundingBox(&testBox,testBox.coords[0].x+1,testBox.coords[0].y);
                 }
             }
         }
@@ -173,6 +176,8 @@ int main(int argc, char **argv) {
 
         //present to screeen
         renderBoundingBox(&testBox,rend);
+        renderBoundingBox(&test2Box,rend);
+        checkBoxCollision(&testBox,&test2Box);
         SDL_RenderPresent(rend);
         animateEntitys(&gameData);
     }

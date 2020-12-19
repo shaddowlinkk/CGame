@@ -5,7 +5,8 @@
 #include "CollisionDetection.h"
 
 
-bool onSegment(Point p, Point q, Point r)
+
+bool onSegment(SDL_Point p, SDL_Point q, SDL_Point r)
 {
     if (q.x <= fmax(p.x, r.x) && q.x >= fmin(p.x, r.x) &&
         q.y <= fmax(p.y, r.y) && q.y >= fmin(p.y, r.y))
@@ -13,7 +14,7 @@ bool onSegment(Point p, Point q, Point r)
 
     return false;
 }
-int orientation(Point p, Point q, Point r)
+int orientation(SDL_Point p, SDL_Point q, SDL_Point r)
 {
     // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
     // for details of below formula.
@@ -24,7 +25,7 @@ int orientation(Point p, Point q, Point r)
 
     return (val > 0)? 1: 2; // clock or counterclock wise
 }
-bool doIntersect(Point p1, Point q1, Point p2, Point q2)
+bool doIntersect(SDL_Point p1, SDL_Point q1, SDL_Point p2, SDL_Point q2)
 {
     // Find the four orientations needed for general and
     // special cases
@@ -51,6 +52,18 @@ bool doIntersect(Point p1, Point q1, Point p2, Point q2)
     if (o4 == 0 && onSegment(p2, q1, q2)) return true;
 
     return false; // Doesn't fall in any of the above cases
+}
+
+bool checkBoxCollision(BoundingBox *box1, BoundingBox *box2){
+    bool check=false;
+    for (int i = 0; i < 3; ++i) {
+         if(doIntersect(box1->coords[i],box1->coords[((i+1)%4)],box2->coords[i],box2->coords[((i+1)%4)])){
+             check=true;
+             SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collision detected with bounding boxes");
+            return check;
+         }
+    }
+    return check;
 }
 
 bool checkCollision( SDL_Rect a, SDL_Rect b )

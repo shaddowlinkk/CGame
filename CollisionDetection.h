@@ -7,11 +7,9 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <stdbool.h>
-typedef struct Point
-{
-    int x;
-    int y;
-}Point;
-bool doIntersect(Point p1, Point q1, Point p2, Point q2);
+#include "GameCore.h"
+
+bool doIntersect(SDL_Point p1, SDL_Point q1, SDL_Point p2, SDL_Point q2);
 bool checkCollision( SDL_Rect a, SDL_Rect b );
+bool checkBoxCollision(BoundingBox *box1, BoundingBox *box2);
 #endif //CGAME_COLLISIONDETECTION_H

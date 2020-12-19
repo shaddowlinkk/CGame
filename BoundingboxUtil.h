@@ -6,6 +6,7 @@
 #define CGAME_BOUNDINGBOXUTIL_H
 
 #include "GameCore.h"
-BoundingBox rotateBoundingBox(BoundingBox box,int degree);
+void rotateBoundingBox(BoundingBox *box,int degree);
 BoundingBox initBoundingBox(int x, int y , int h , int w);
+void setBoundingBox(BoundingBox *outBox,int x,int y);
 #endif //CGAME_BOUNDINGBOXUTIL_H
