@@ -56,8 +56,20 @@ bool doIntersect(SDL_Point p1, SDL_Point q1, SDL_Point p2, SDL_Point q2)
 
 bool checkBoxCollision(BoundingBox *box1, BoundingBox *box2){
     bool check=false;
-    for (int i = 0; i < 3; ++i) {
-         if(doIntersect(box1->coords[i],box1->coords[((i+1)%4)],box2->coords[i],box2->coords[((i+1)%4)])){
+    SDL_Point rect[5];
+    rect[0]=box1->coords[0];
+    rect[1]=box1->coords[1];
+    rect[2]=box1->coords[2];
+    rect[3]=box1->coords[3];
+    rect[4]=box1->coords[0];
+    SDL_Point rect2[5];
+    rect2[0]=box2->coords[0];
+    rect2[1]=box2->coords[1];
+    rect2[2]=box2->coords[2];
+    rect2[3]=box2->coords[3];
+    rect2[4]=box2->coords[0];
+    for (int i = 0; i < 4; ++i) {
+         if(doIntersect(rect[i],rect[i+1],rect2[i],rect2[i+1])){
              check=true;
              SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collision detected with bounding boxes");
             return check;

@@ -57,8 +57,8 @@ void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend){
     SDL_Point rect[5];
     rect[0]=box->coords[0];
     rect[1]=box->coords[1];
-    rect[2]=box->coords[3];
-    rect[3]=box->coords[2];
+    rect[2]=box->coords[2];
+    rect[3]=box->coords[3];
     rect[4]=box->coords[0];
     SDL_SetRenderDrawColor(rend, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderDrawLines(rend,rect,5);

@@ -8,5 +8,6 @@
 #include "GameCore.h"
 void rotateBoundingBox(BoundingBox *box,int degree);
 BoundingBox initBoundingBox(int x, int y , int h , int w);
+void moveBoundingBox(BoundingBox *outBox,int dx,int dy);
 void setBoundingBox(BoundingBox *outBox,int x,int y);
 #endif //CGAME_BOUNDINGBOXUTIL_H

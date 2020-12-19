@@ -136,8 +136,17 @@ int main(int argc, char **argv) {
                     count+=5;
                     rotateBoundingBox(&testBox,count);
                 }
-                if(event.key.keysym.scancode==SDL_SCANCODE_F4){
-                    setBoundingBox(&testBox,testBox.coords[0].x+1,testBox.coords[0].y);
+                if(event.key.keysym.scancode==SDL_SCANCODE_W){
+                    moveBoundingBox(&testBox,0,-1);
+                }
+                if(event.key.keysym.scancode==SDL_SCANCODE_A){
+                    moveBoundingBox(&testBox,-1,0);
+                }
+                if(event.key.keysym.scancode==SDL_SCANCODE_S){
+                    moveBoundingBox(&testBox,0,1);
+                }
+                if(event.key.keysym.scancode==SDL_SCANCODE_D){
+                    moveBoundingBox(&testBox,1,0);
                 }
             }
         }
@@ -152,7 +161,7 @@ int main(int argc, char **argv) {
         re.y=32;
 
 
-        linkEntityToUserInput(Findnode(&gameData.start,0),&gameData);
+        //linkEntityToUserInput(Findnode(&gameData.start,0),&gameData);
         bindEntitysToRect(&gameData,re);
         moveEntity(&gameData);
 
