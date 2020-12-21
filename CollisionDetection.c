@@ -3,7 +3,8 @@
 //
 
 #include "CollisionDetection.h"
-
+#include "GameCore.h"
+#include <math.h>
 
 
 bool onSegment(SDL_Point p, SDL_Point q, SDL_Point r)
@@ -54,28 +55,26 @@ bool doIntersect(SDL_Point p1, SDL_Point q1, SDL_Point p2, SDL_Point q2)
     return false; // Doesn't fall in any of the above cases
 }
 
-bool checkBoxCollision(BoundingBox *box1, BoundingBox *box2){
+
+
+int distance(SDL_Point p1, SDL_Point p2){
+    return sqrt(pow((p2.x-p1.x),2)+pow((p2.y-p1.y),2));
+}
+
+bool optCheckCollisions(BoundingBox *box1, BoundingBox *box2,int dist){
     bool check=false;
-    SDL_Point rect[5];
-    rect[0]=box1->coords[0];
-    rect[1]=box1->coords[1];
-    rect[2]=box1->coords[2];
-    rect[3]=box1->coords[3];
-    rect[4]=box1->coords[0];
-    SDL_Point rect2[5];
-    rect2[0]=box2->coords[0];
-    rect2[1]=box2->coords[1];
-    rect2[2]=box2->coords[2];
-    rect2[3]=box2->coords[3];
-    rect2[4]=box2->coords[0];
-    for (int i = 0; i < 4; ++i) {
-         if(doIntersect(rect[i],rect[i+1],rect2[i],rect2[i+1])){
-             check=true;
-             SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collision detected with bounding boxes");
-            return check;
-         }
+    if(distance(box1->center,box2->center)<dist) {
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                if (doIntersect(box1->coords[i], box1->coords[(i+1)%4], box2->coords[j], box2->coords[(j+1)%4])) {
+                    check = true;
+                    return check;
+                }
+            }
+        }
     }
     return check;
+
 }
 
 bool checkCollision( SDL_Rect a, SDL_Rect b )

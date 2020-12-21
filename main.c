@@ -9,6 +9,7 @@
 #include "BoundingboxUtil.h"
 #include "Room.h"
 #include "CollisionDetection.h"
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
 /**
  * This function moves the cutting SDL_Rect to the next frame of the animation
  * @param entity what ever entity you are trying to animate.
@@ -105,8 +106,7 @@ int main(int argc, char **argv) {
     strcpy(inv.textureName,"inv.png");
     inv.state=0;
     writeEntityToFile("inv.ent",&inv);*/
-
-
+    render=rend;
     gameData.inventory=readEntityFromFile("inv.ent",rend);
 
     LoadBigMapFile("dtemp.map",&gameData);
@@ -186,7 +186,9 @@ int main(int argc, char **argv) {
         //present to screeen
         renderBoundingBox(&testBox,rend);
         renderBoundingBox(&test2Box,rend);
-        checkBoxCollision(&testBox,&test2Box);
+        if (optCheckCollisions(&testBox,&test2Box,(MAX(testBox.h,testBox.w)+(MAX(testBox.h,testBox.w)*.1)))){
+            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"detected");
+        }
         SDL_RenderPresent(rend);
         animateEntitys(&gameData);
     }

@@ -10,7 +10,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #define mapsize 22
-
+SDL_Renderer  *render;
 typedef struct _boundingBox{
     int h,w,degree;
     SDL_Point coords[4];
