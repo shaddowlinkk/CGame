@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 //    gameData.inventory=inv;
 
 
-    LoadBigMapFile("dtemp.map",&gameData);
+    LoadBigMapFile("newmap.map",&gameData);
     LoadTileData(&gameData);
 
     gameData.start=NULL;
@@ -154,6 +154,11 @@ int main(int argc, char **argv) {
 
     SDL_RenderClear(rend);
     int running=1;
+    SDL_Rect re;
+    re.w=gameData.window_w-64;
+    re.h=gameData.window_h-64;
+    re.x=32;
+    re.y=32;
     SDL_Event event;
     while(running) {
         int states=0;
@@ -187,15 +192,12 @@ int main(int argc, char **argv) {
         SDL_RenderClear(rend);
 
         //game logic
-        SDL_Rect re;
-        re.w=gameData.window_w-64;
-        re.h=gameData.window_h-64;
-        re.x=32;
-        re.y=32;
+
 
 
         linkEntityToUserInput(Findnode(&gameData.start,0),&gameData);
-        bindEntitysToRect(&gameData,re);
+        //bindEntitysToRect(&gameData,re);
+        staticObjectCollition(player,gameData.currentRoom->staticBlocks);
         moveEntity(&gameData);
 
         //creating next frame
@@ -203,11 +205,12 @@ int main(int argc, char **argv) {
 
         doorTiggerCollition(&gameData);
 
-        SDL_RenderDrawRect(rend,&re);
         //renderRoomCode(&gameData,rend,font,color);
         //renderTriggerBox(&gameData,rend);
         //renderEntityBoxList(&gameData,rend);
+        renderWallBox(&gameData,rend);
         renderBoundingBox(&player->box,rend);
+        SDL_RenderDrawRect(rend,&re);
         renderEntitys(&gameData,rend);
 
         if (gameData.inventory.state!=0){
@@ -216,11 +219,7 @@ int main(int argc, char **argv) {
             SDL_RenderCopy(rend,gameData.inventory.spriteSheet,&gameData.inventory.cutter,&gameData.inventory.sprite);
         }
 
-        //present to screeen
-        renderBoundingBox(&testBox,rend);
-        if (optCheckCollisions(&testBox,&player->box,(MAX(player->box.h,player->box.w)+(MAX(player->box.h,player->box.w)*.1)))){
-            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"detected");
-        }
+        //present to screee
         SDL_RenderPresent(rend);
         animateEntitys(&gameData);
     }

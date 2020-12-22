@@ -11,5 +11,5 @@
 
 bool doIntersect(SDL_Point p1, SDL_Point q1, SDL_Point p2, SDL_Point q2);
 bool checkCollision( SDL_Rect a, SDL_Rect b );
-bool optCheckCollisions(BoundingBox *box1, BoundingBox *box2,int dist);
+int optCheckCollisions(BoundingBox *box1, BoundingBox *box2,int dist);
 #endif //CGAME_COLLISIONDETECTION_H

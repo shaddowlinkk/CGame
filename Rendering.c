@@ -66,3 +66,10 @@ void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend){
     SDL_RenderDrawPoint(rend,box->center.x,box->center.y);
     SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
 }
+void renderWallBox(GameData *data, SDL_Renderer *rend){
+    node **trace = &data->currentRoom->staticBlocks;
+    while (*trace){
+        renderBoundingBox(&(*trace)->item.box,rend);
+        trace = &(*trace)->next;
+    }
+}

@@ -44,8 +44,9 @@ typedef struct _room{
     unsigned int door:4;
     char *mapName;
     node *items;
-    node *mobs;
     node *staticBlocks;
+    node *mobs;
+    int built;
     struct _room *rooms[4];
     int gened:1;
 }Room;

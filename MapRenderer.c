@@ -3,6 +3,8 @@
 //
 
 #include "MapRenderer.h"
+#include "BoundingboxUtil.h"
+#include "LinkedList.h"
 /**
  * renders the backbround map;
  * @param rend renderer
@@ -107,6 +109,13 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                         SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[2].tileRect,&ground.tileRect);
                     }
                 }
+            }else if(gameData->map[y][x]==2&&gameData->currentRoom->built==0){
+                Entity wall;
+                wall.box=initBoundingBox(ground.tileRect.x,ground.tileRect.y,ground.tileRect.h,ground.tileRect.w);
+                wall.sprite=ground.tileRect;
+                wall.ID=0;
+                Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
+                SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
             }else{
                 SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
             }
@@ -114,4 +123,5 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
             ground.tileRect.w=32;
         }
     }
+    gameData->currentRoom->built=1;
 }

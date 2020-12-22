@@ -60,21 +60,27 @@ bool doIntersect(SDL_Point p1, SDL_Point q1, SDL_Point p2, SDL_Point q2)
 int distance(SDL_Point p1, SDL_Point p2){
     return sqrt(pow((p2.x-p1.x),2)+pow((p2.y-p1.y),2));
 }
+/**
+ *
+ * @param box1 collider
+ * @param box2 collide
+ * @param dist
+ * @return the collition side on box2
+ */
 
-bool optCheckCollisions(BoundingBox *box1, BoundingBox *box2,int dist){
-    bool check=false;
+int optCheckCollisions(BoundingBox *box1, BoundingBox *box2,int dist){
+    int check=-1;
     if(distance(box1->center,box2->center)<dist) {
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
                 if (doIntersect(box1->coords[i], box1->coords[(i+1)%4], box2->coords[j], box2->coords[(j+1)%4])) {
-                    check = true;
+                    check = j;
                     return check;
                 }
             }
         }
     }
     return check;
-
 }
 
 bool checkCollision( SDL_Rect a, SDL_Rect b )
