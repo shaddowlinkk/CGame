@@ -53,6 +53,7 @@ void moveEntity(GameData *data){
         while (*tracer) {
             (*tracer)->item.sprite.x += (*tracer)->item.velx;
             (*tracer)->item.sprite.y += (*tracer)->item.vely;
+            setBoundingBox(&(*tracer)->item.box,(*tracer)->item.sprite.x,(*tracer)->item.sprite.y);
             tracer = &(*tracer)->next;
         }
     }
@@ -88,10 +89,8 @@ int main(int argc, char **argv) {
 
 
     //inisalizing the list and loading in data
-    /*SDL_Surface  *surface = IMG_Load(".\\Textures\\inv.png");
+/*    SDL_Surface  *surface = IMG_Load(".\\Textures\\inv.png");
     SDL_Texture *tex = SDL_CreateTextureFromSurface(rend,surface);
-    SDL_FreeSurface(surface);
-
     Entity inv;
     inv.cutter.x=0;
     inv.cutter.y=0;
@@ -102,22 +101,56 @@ int main(int argc, char **argv) {
     inv.sprite.x=32;
     inv.sprite.y=32;
     inv.spriteSheet=tex;
+    inv.box=initBoundingBox(0,0,60,172);
     memset(inv.textureName,0x00,sizeof(20));
     strcpy(inv.textureName,"inv.png");
     inv.state=0;
-    writeEntityToFile("inv.ent",&inv);*/
-    render=rend;
-    gameData.inventory=readEntityFromFile("inv.ent",rend);
+    writeEntityToFile("invent.ent",&inv);
+
+    surface = IMG_Load(".\\Textures\\test.png");
+    tex = SDL_CreateTextureFromSurface(rend,surface);
+    Entity ply;
+    ply.ID=0;
+    ply.cutter.x=0;
+    ply.cutter.y=0;
+    ply.cutter.w=16;
+    ply.cutter.h=32;
+    ply.sprite.w=16;
+    ply.sprite.h=32;
+    ply.sprite.x=352;
+    ply.sprite.y=352;
+    ply.spriteSheet=tex;
+    ply.state=0;
+    memset(ply.animationStates,0x00,sizeof(15));
+    ply.animationStates[0]=7;
+    ply.animationStates[1]=11;
+    ply.animationStates[2]=11;
+    ply.animationStates[3]=8;
+    ply.animationStates[4]=9;
+    ply.animationStates[5]=16;
+    ply.velx=0;
+    ply.vely=0;
+    ply.box=initBoundingBox(352,352,32,16);;
+    memset(ply.textureName,0x00,sizeof(20));
+    strcpy(ply.textureName,"test.png");
+    writeEntityToFile("player.ent",&ply);
+    SDL_FreeSurface(surface);*/
+
+    gameData.inventory=readEntityFromFile("invent.ent",rend);
+//    gameData.inventory=inv;
+
 
     LoadBigMapFile("dtemp.map",&gameData);
     LoadTileData(&gameData);
 
     gameData.start=NULL;
     gameData.currentRoom=initRooms();
-    Insertnode(&gameData.start,NewElement(readEntityFromFile("play.ent",rend)));
+    Insertnode(&gameData.start,NewElement(readEntityFromFile("player.ent",rend)));
+//    Insertnode(&gameData.start,NewElement(ply));
+
     BoundingBox testBox = initBoundingBox(100,100,20,10);
-    BoundingBox test2Box = initBoundingBox(200,100,20,10);
     int count=0;
+    Entity *player = Findnode(&gameData.start,0);
 
     SDL_RenderClear(rend);
     int running=1;
@@ -131,7 +164,7 @@ int main(int argc, char **argv) {
             }else if (event.type == SDL_KEYDOWN){
                 if(event.key.keysym.scancode==SDL_SCANCODE_F2){
                     gameData.inventory.state= ((gameData.inventory.state+1)%2);
-                }
+                }/*
                 if(event.key.keysym.scancode==SDL_SCANCODE_F3){
                     count+=5;
                     rotateBoundingBox(&testBox,count);
@@ -147,7 +180,7 @@ int main(int argc, char **argv) {
                 }
                 if(event.key.keysym.scancode==SDL_SCANCODE_D){
                     moveBoundingBox(&testBox,1,0);
-                }
+                }*/
             }
         }
         // clear old frame
@@ -161,7 +194,7 @@ int main(int argc, char **argv) {
         re.y=32;
 
 
-        //linkEntityToUserInput(Findnode(&gameData.start,0),&gameData);
+        linkEntityToUserInput(Findnode(&gameData.start,0),&gameData);
         bindEntitysToRect(&gameData,re);
         moveEntity(&gameData);
 
@@ -171,22 +204,21 @@ int main(int argc, char **argv) {
         doorTiggerCollition(&gameData);
 
         SDL_RenderDrawRect(rend,&re);
-        renderRoomCode(&gameData,rend,font,color);
-        renderTriggerBox(&gameData,rend);
-        renderEntityBoxList(&gameData,rend);
+        //renderRoomCode(&gameData,rend,font,color);
+        //renderTriggerBox(&gameData,rend);
+        //renderEntityBoxList(&gameData,rend);
+        renderBoundingBox(&player->box,rend);
         renderEntitys(&gameData,rend);
 
         if (gameData.inventory.state!=0){
-            Entity *temp = Findnode(&gameData.start,0);
-            gameData.inventory.sprite.x=temp->sprite.x-(172/2)+(temp->cutter.w/2);
-            gameData.inventory.sprite.y=temp->sprite.y-(60);
+            gameData.inventory.sprite.x=player->sprite.x-(172/2)+(player->cutter.w/2);
+            gameData.inventory.sprite.y=player->sprite.y-(60);
             SDL_RenderCopy(rend,gameData.inventory.spriteSheet,&gameData.inventory.cutter,&gameData.inventory.sprite);
         }
 
         //present to screeen
         renderBoundingBox(&testBox,rend);
-        renderBoundingBox(&test2Box,rend);
-        if (optCheckCollisions(&testBox,&test2Box,(MAX(testBox.h,testBox.w)+(MAX(testBox.h,testBox.w)*.1)))){
+        if (optCheckCollisions(&testBox,&player->box,(MAX(player->box.h,player->box.w)+(MAX(player->box.h,player->box.w)*.1)))){
             SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"detected");
         }
         SDL_RenderPresent(rend);

@@ -10,7 +10,6 @@
 #include <SDL2/SDL_ttf.h>
 
 #define mapsize 22
-SDL_Renderer  *render;
 typedef struct _boundingBox{
     int h,w,degree;
     SDL_Point coords[4];
@@ -27,6 +26,7 @@ typedef struct _Entity{
     char textureName[20];
     int velx,vely;
     int animationStates[15];
+    BoundingBox box;
 }Entity;
 
 typedef struct _TriggerAreas{
@@ -45,6 +45,7 @@ typedef struct _room{
     char *mapName;
     node *items;
     node *mobs;
+    node *staticBlocks;
     struct _room *rooms[4];
     int gened:1;
 }Room;

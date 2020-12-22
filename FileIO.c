@@ -26,6 +26,7 @@ Entity readEntityFromFile(char *name,SDL_Renderer *rend){
     //geting the texture for entity
     char path[32]=".\\Textures\\";
     strcat(path,entity.textureName);
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,path);
     SDL_Surface  *surface = IMG_Load(path);
     SDL_Texture *tex = SDL_CreateTextureFromSurface(rend,surface);
     SDL_FreeSurface(surface);
