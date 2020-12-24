@@ -29,8 +29,8 @@ void staticObjectCollition(Entity *entity,node *list){
         while (*tracer) {
             int side=optCheckCollisions(&entity->box,&(*tracer)->item.box,(MAX(entity->box.h,entity->box.w)+(MAX(entity->box.h,entity->box.w)*.1)));
         if(side!=-1){
-            stopEntityMovement(entity,side);
-            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collition:%d",side);
+            stopEntityMovement(entity);
+            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collition:%d,%d",entity->velx,entity->vely);
         }
         tracer = &(*tracer)->next;
         }
