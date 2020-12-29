@@ -11,6 +11,10 @@ NEED TO IMPLEMENT
 Xp1,p2= (xp1-xp2)
 yp1,p2= (yp1-yp2)
 θ = tan-1(yp1,p2 /Xp1,p2)
+ if(x<0)
+    if(θ>0) then θ+π
+    else θ-π
+
 HR =(HR∈ℝ|(π/2)>HR>-( π/2) ⋃ 1 ≤ tan(HR)≥ -1 )
 HL =(HL∈ℝ|(π/2)<HR<-( π/2) ⋃ 1 ≤ tan(HR)≥ -1 )
 
