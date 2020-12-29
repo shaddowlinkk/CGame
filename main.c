@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 //    gameData.inventory=inv;
 
 
-    LoadBigMapFile("newmap.map",&gameData);
+    LoadBigMapFile("test.map",&gameData);
     LoadTileData(&gameData);
 
     gameData.start=NULL;

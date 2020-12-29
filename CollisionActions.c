@@ -30,22 +30,19 @@ VDL=(VDL∈ℝ|(π/2)<VDL <-( π/2) ⋃ tan(tan(VDL) ≤ 1 )
 
 void stopEntityMovement(Entity *mover,Entity *collision){
  double x =(collision->box.center.x-mover->box.center.x),y =(collision->box.center.y-mover->box.center.y);
+ y*=-1;
  double theta=atan((y/x));
+ if(x<0){
+     if(theta>0) {
+         theta += M_PI;
+     }else{
+         theta -= M_PI;
+     }
+ }
  mover->vely=0;
  mover->velx=0;
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collition:%lf",(theta));
- if(( theta<(M_PI/2)&& theta>0)||( theta>((3*M_PI)/2)&& theta<(2*M_PI))){
-     double value = tan(theta);
-     if(value<=1 && value>=-1){
-         mover->sprite.x=mover->sprite.x+1;
-     }
-     if(value >=1){
-         mover->sprite.y=mover->sprite.y+1;
-     }
-     if(value <=-1){
-         mover->sprite.y=mover->sprite.y-1;
-     }
- }else if(( theta>(M_PI/2)&& theta<((3*M_PI)/2))){
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collition:%lf:%lf:%lf",theta,M_PI/2,-M_PI/2);
+ if(( theta<(M_PI/2)&& theta>(-(M_PI/2)))){
      double value = tan(theta);
      if(value<=1 && value>=-1){
          mover->sprite.x=mover->sprite.x-1;
@@ -55,6 +52,17 @@ void stopEntityMovement(Entity *mover,Entity *collision){
      }
      if(value <=-1){
          mover->sprite.y=mover->sprite.y-1;
+     }
+ }else if(( theta>(M_PI/2) || theta<(-(M_PI/2)))){
+     double value = tan(theta);
+     if(value<=1 && value>=-1){
+         mover->sprite.x=mover->sprite.x+1;
+     }
+     if(value >=1){
+         mover->sprite.y=mover->sprite.y-1;
+     }
+     if(value <=-1){
+         mover->sprite.y=mover->sprite.y+1;
      }
  }else{
      mover->sprite.y=mover->sprite.y-1;
