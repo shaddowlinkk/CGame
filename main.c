@@ -197,18 +197,18 @@ int main(int argc, char **argv) {
 
         linkEntityToUserInput(Findnode(&gameData.start,0),&gameData);
         //bindEntitysToRect(&gameData,re);
-        staticObjectCollition(player,gameData.currentRoom->staticBlocks);
+        staticObjectCollision(player, gameData.currentRoom->staticBlocks);
         moveEntity(&gameData);
 
         //creating next frame
         renderMapFromFile(rend,&gameData);
 
-        doorTiggerCollition(&gameData);
+        doorTiggerCollision(&gameData);
 
         //renderRoomCode(&gameData,rend,font,color);
         //renderTriggerBox(&gameData,rend);
         //renderEntityBoxList(&gameData,rend);
-        renderWallBox(&gameData,rend);
+        //renderWallBox(&gameData,rend);
         renderBoundingBox(&player->box,rend);
         SDL_RenderDrawRect(rend,&re);
         renderEntitys(&gameData,rend);

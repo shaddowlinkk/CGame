@@ -5,6 +5,6 @@
 #ifndef CGAME_COLLISIONEVENTS_H
 #define CGAME_COLLISIONEVENTS_H
 #include "GameCore.h"
-void doorTiggerCollition(GameData *data);
-void staticObjectCollition(Entity *entity,node *list);
+void doorTiggerCollision(GameData *data);
+void staticObjectCollision(Entity *entity, node *list);
 #endif //CGAME_COLLISIONEVENTS_H
