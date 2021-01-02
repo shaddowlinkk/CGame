@@ -3,6 +3,7 @@
 //
 
 #include "Rendering.h"
+#include "LinkedList.h"
 #include <stdio.h>
 /**
  * renderd the SDL RECT that defines how an entity is renders
@@ -51,6 +52,15 @@ void renderRoomCode(GameData *data, SDL_Renderer *rend,TTF_Font *font, SDL_Color
     SDL_Rect dstrect = { 0, 0, 256,32 };
     SDL_RenderCopy(rend,texture,NULL,&dstrect);
     SDL_DestroyTexture(texture);
+}
+
+void renderInventory(GameData *gameData,SDL_Renderer *rend){
+    Entity *player = Findnode(&gameData->start,0);
+    if (gameData->inventory.state!=0){
+        gameData->inventory.sprite.x=player->sprite.x-(172/2)+(player->cutter.w/2);
+        gameData->inventory.sprite.y=player->sprite.y-(60);
+        SDL_RenderCopy(rend,gameData->inventory.spriteSheet,&gameData->inventory.cutter,&gameData->inventory.sprite);
+    }
 }
 
 void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend){

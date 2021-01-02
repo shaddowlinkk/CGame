@@ -6,15 +6,21 @@
 #include "math.h"
 #include "BoundingboxUtil.h"
 
-/*TODO Give point p¬1,p1 get Δx and  Δy to move the box away
-NEED TO IMPLEMENT
+/*Given point p¬1,p1 get Δx and  Δy to move the box away
+
+makes the origin of the graph not at p2 and give (x,y) for p1 when p2 is the origin
 Xp1,p2= (xp1-xp2)
 yp1,p2= (yp1-yp2)
+
+gets the angel in radian to that point
 θ = tan-1(yp1,p2 /Xp1,p2)
  if(x<0)
     if(θ>0) then θ+π
     else θ-π
 
+checks the moving conditions
+
+ todo update this so that it is right
 HR =(HR∈ℝ|(π/2)>HR>-( π/2) ⋃ 1 ≤ tan(HR)≥ -1 )
 HL =(HL∈ℝ|(π/2)<HR<-( π/2) ⋃ 1 ≤ tan(HR)≥ -1 )
 
@@ -45,7 +51,6 @@ void stopEntityMovement(Entity *mover,Entity *collision){
  }
  mover->vely=0;
  mover->velx=0;
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"collition:%lf:%lf:%lf",theta,M_PI/2,-M_PI/2);
  if(( theta<(M_PI/2)&& theta>(-(M_PI/2)))){
      double value = tan(theta);
      if(value<=1 && value>=-1){

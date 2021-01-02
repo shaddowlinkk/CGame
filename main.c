@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 //    gameData.inventory=inv;
 
 
-    LoadBigMapFile("test.map",&gameData);
+    LoadBigMapFile("newmap.map",&gameData);
     LoadTileData(&gameData);
 
     gameData.start=NULL;
@@ -209,15 +209,11 @@ int main(int argc, char **argv) {
         //renderTriggerBox(&gameData,rend);
         //renderEntityBoxList(&gameData,rend);
         //renderWallBox(&gameData,rend);
-        renderBoundingBox(&player->box,rend);
-        SDL_RenderDrawRect(rend,&re);
+        //renderBoundingBox(&player->box,rend);
+        //SDL_RenderDrawRect(rend,&re);
         renderEntitys(&gameData,rend);
-
-        if (gameData.inventory.state!=0){
-            gameData.inventory.sprite.x=player->sprite.x-(172/2)+(player->cutter.w/2);
-            gameData.inventory.sprite.y=player->sprite.y-(60);
-            SDL_RenderCopy(rend,gameData.inventory.spriteSheet,&gameData.inventory.cutter,&gameData.inventory.sprite);
-        }
+        renderInventory(&gameData,rend);
+;
 
         //present to screee
         SDL_RenderPresent(rend);

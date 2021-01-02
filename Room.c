@@ -13,6 +13,7 @@ Room *newRoom(unsigned int indor , Room *prevroom){
     new->mapName="";
     new->built=0;
     new->staticBlocks=NULL;
+    new->items=NULL;
     new->gened=0;
     return new;
 }
@@ -61,6 +62,7 @@ Room *initRooms(){
     INIT_ROOM_PTR(new);
     new->built=0;
     new->staticBlocks=NULL;
+    new->items=NULL;
     genRoomALL(new);
     return new;
 }

@@ -53,9 +53,14 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
             //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"%i",gameData->map[y][x]);
             if(gameData->map[y][x]>=7 && gameData->map[y][x]<=10){
                 //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"????");
+                Entity wall;
+                wall.sprite=ground.tileRect;
+                wall.ID=0;
                 ground.tileRect.h=32;
                 ground.tileRect.w=64;
                 if (gameData->map[y][x]==9 || gameData->map[y][x] ==7){
+                    wall.box=initBoundingBox(ground.tileRect.x,ground.tileRect.y,ground.tileRect.h,ground.tileRect.w);
+                    Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
                     trigger.Rect.x=(x*32)+16;
                     trigger.Rect.h=2;
                     if(gameData->map[y][x] ==7&&(gameData->currentRoom->door&(mask<<3))!=0){
@@ -80,6 +85,8 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                     }
 
                 }else{
+                    wall.box=initBoundingBox(ground.tileRect.x,ground.tileRect.y,ground.tileRect.h+32,ground.tileRect.w-32);
+                    Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
                     trigger.Rect.y=(y*32)+16;
                     trigger.Rect.h=32;
                     trigger.Rect.w=2;
