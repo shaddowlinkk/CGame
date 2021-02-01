@@ -50,6 +50,7 @@ typedef struct _CoreGameData{
     MapTile Tiles[100];
     int window_h,window_w;
     Room *currentRoom;
+    SDL_Renderer *outrender;
 }GameData;
 
 #endif //CGAME_GAMECORE_H

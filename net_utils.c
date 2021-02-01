@@ -11,7 +11,7 @@ int extract_msg_code(char** msg) {
 
 void sendPrepMsg(char* msg, int sock){
     if (send(sock, msg, MAXLINE, 0) == -1) {
-        printf("error sending msg");
+        printf("error sending msg\n");
     }
 
 }
