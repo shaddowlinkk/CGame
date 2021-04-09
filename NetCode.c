@@ -9,7 +9,7 @@
 
 #include "FileIO.h"
 DWORD runNetCode(void *data) {
-    GameData *test = data;
+    system *test = data;
 
 #ifdef __WIN64
     WSADATA wsa;

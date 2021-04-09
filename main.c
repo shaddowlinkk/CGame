@@ -1,6 +1,6 @@
 #include "GameCore.h"
 #include "Rendering.h"
-#include "base_code.h"
+#include "Base_code.h"
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     unsigned long ids[3];
