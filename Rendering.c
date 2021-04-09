@@ -4,6 +4,7 @@
 
 #include "Rendering.h"
 #include "LinkedList.h"
+#include "MapRenderer.h"
 #include "BoundingboxUtil.h"
 #include <stdio.h>
 /**
@@ -96,21 +97,85 @@ void animate(Entity *entity, int state){
 
 }
 
-void animateEntitys(GameData *data){
+void animateEntitys(SystemData *data){
     //count slows the animation todo need to remove that and make it native to the rendering loop
     static int count =0;
-    node **tracer = &data->start;
-    if(!*tracer){
-        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 6");
-    }else {
-        if (count == 3) {
-            count = 0;
-            while (*tracer) {
-                animate(&(*tracer)->item,(*tracer)->item.state);
-                tracer = &(*tracer)->next;
-            }
+        DWORD wait = WaitForSingleObject(data->LockGameData, 2);
+        if (wait==WAIT_OBJECT_0) {
+            count =0;
+            node **tracer = &data->gameData->start;
+            if (!*tracer) {
+                SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR,
+                               "no list data in entity linked list 6");
+            } else {
+                //if (count == 3) {
+                    count = 0;
+                    while (*tracer) {
+                        animate(&(*tracer)->item, (*tracer)->item.state);
+                        tracer = &(*tracer)->next;
+                    }
 
+               // }
+                count++;
+            }
+            ReleaseMutex(data->LockGameData);
+        }else{
+            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"failed animate");
         }
-        count++;
+}
+
+DWORD WINAPI renderingSystem(void *vararg){
+    SystemData *system=(SystemData *)vararg;
+
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
+    SDL_Window *win = SDL_CreateWindow("CGame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (mapsize * 32),
+                                       mapsize * 32, SDL_WINDOW_OPENGL);
+    SDL_GetWindowSize(win, &system->gameData->window_w, &system->gameData->window_h);
+    if (!win) {
+        SDL_Quit();
+        return 1;
     }
+    SDL_Renderer *rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
+    if (!rend) {
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 2;
+    }
+    DWORD wait = WaitForSingleObject(system->LockGameData, 2);
+    if (wait==WAIT_OBJECT_0) {
+        system->render=&rend;
+        SDL_Surface *s = IMG_Load(".\\Textures\\Floor.png");
+        system->gameData->GroundSheet = SDL_CreateTextureFromSurface(rend, s);
+        SDL_FreeSurface(s);
+        ReleaseMutex(system->LockGameData);
+    }
+    TTF_Font * font = TTF_OpenFont("arial.ttf", 25);
+    SDL_Color color = { 255, 255, 255 };
+    SetEvent(system->mainSystem);
+    int lvc;
+    while (lvc == 0) {
+        if(WaitForSingleObject(system->rendering,INFINITE)==WAIT_OBJECT_0) {
+            SDL_RenderClear(rend);
+            renderMapFromFile(rend,system->gameData);
+            renderRoomCode(system->gameData, rend, font, color);
+            //renderTriggerBox(&system->gameData,system->rend);
+            //renderEntityBoxList(&system->gameData,system->rend);
+            renderWallBox(system->gameData, rend);
+            //renderBoundingBox(&player->box,system->rend);
+            //SDL_RenderDrawRect(system->rend,&re);
+            renderEntitys(system->gameData, rend);
+            renderInventory(system->gameData, rend);
+
+            //present to screee
+            SDL_RenderPresent(rend);
+            animateEntitys(system);
+            ResetEvent(system->rendering);
+        }
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"rend run");
+    }
+    TTF_CloseFont(font);
+    TTF_Quit();
+    SDL_Quit();
 }

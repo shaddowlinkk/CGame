@@ -5,7 +5,7 @@
 #include "FileIO.h"
 void writeEntityToFile(char *name,Entity *entity){
     FILE *player;
-    char filepath[31]=".\\Entitys\\";
+    char filepath[31]=".\\entitys\\";
     strcat(filepath,name);
     player=fopen(filepath,"wb");
     fwrite(entity,sizeof(Entity),1,player);
@@ -15,7 +15,7 @@ void writeEntityToFile(char *name,Entity *entity){
 Entity readEntityFromFile(char *name,SDL_Renderer *rend){
     Entity entity;
     FILE *player;
-    char filepath[]=".\\Entitys\\";
+    char filepath[]=".\\entitys\\";
     strcat(filepath,name);
 
     //reading from file
@@ -65,7 +65,7 @@ void LoadBigMapFile(char *name,GameData *data){
 }
 void LoadTileData(GameData *data){
     FILE *tiles;
-    tiles=fopen(".\\Entitys\\TileData.dat","r");
+    tiles=fopen(".\\entitys\\TileData.dat","r");
     SDL_Rect temp;
     for(int i =0;i<20;i++){
         fread(&temp,sizeof(struct SDL_Rect),1,tiles);

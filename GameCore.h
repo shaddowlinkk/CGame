@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <windows.h>
 
 #define mapsize 22
 typedef struct _boundingBox{
@@ -68,5 +69,14 @@ typedef struct _CoreGameData{
     int window_h,window_w;
     Room *currentRoom;
 }GameData;
+typedef struct _SystemData{
+    GameData *gameData;
+    SDL_Renderer **render;
+    void *rendering;
+    void *systemIO;
+    void *mainSystem;
+    void *lockEntityies;
+    void *LockGameData;
+}SystemData;
 
 #endif //CGAME_GAMECORE_H
