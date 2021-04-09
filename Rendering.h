@@ -12,4 +12,6 @@ void renderRoomCode(GameData *data, SDL_Renderer *rend,TTF_Font *font, SDL_Color
 void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend);
 void renderWallBox(GameData *data, SDL_Renderer *rend);
 void renderInventory(GameData *gameData,SDL_Renderer *rend);
+void animateEntitys(GameData *data);
+void animate(Entity *entity, int state);
 #endif //CGAME_UTILRENDER_H

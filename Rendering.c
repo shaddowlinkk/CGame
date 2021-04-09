@@ -4,6 +4,7 @@
 
 #include "Rendering.h"
 #include "LinkedList.h"
+#include "BoundingboxUtil.h"
 #include <stdio.h>
 /**
  * renderd the SDL RECT that defines how an entity is renders
@@ -81,5 +82,35 @@ void renderWallBox(GameData *data, SDL_Renderer *rend){
     while (*trace){
         renderBoundingBox(&(*trace)->item.box,rend);
         trace = &(*trace)->next;
+    }
+}
+/**
+ * This function moves the cutting SDL_Rect to the next frame of the animation
+ * @param entity what ever entity you are trying to animate.
+ * @param state the animation state that corresponds to the action you are trying to animate
+ */
+void animate(Entity *entity, int state){
+    // todo need to remove that and make it native to the rendering loop
+    entity->cutter.y = (entity->cutter.h*state);
+    entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)));
+
+}
+
+void animateEntitys(GameData *data){
+    //count slows the animation todo need to remove that and make it native to the rendering loop
+    static int count =0;
+    node **tracer = &data->start;
+    if(!*tracer){
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 6");
+    }else {
+        if (count == 3) {
+            count = 0;
+            while (*tracer) {
+                animate(&(*tracer)->item,(*tracer)->item.state);
+                tracer = &(*tracer)->next;
+            }
+
+        }
+        count++;
     }
 }

@@ -9,42 +9,8 @@
 #include "BoundingboxUtil.h"
 #include "Room.h"
 #include "CollisionDetection.h"
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-/**
- * This function moves the cutting SDL_Rect to the next frame of the animation
- * @param entity what ever entity you are trying to animate.
- * @param state the animation state that corresponds to the action you are trying to animate
- */
-void animate(Entity *entity, int state){
-    // todo need to remove that and make it native to the rendering loop
-        entity->cutter.y = (entity->cutter.h*state);
-        entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)));
+//#define MAX(a,b) (((a) > (b)) ? (a) : (b))
 
-}
-
-void animateEntitys(GameData *data){
-    //count slows the animation todo need to remove that and make it native to the rendering loop
-    static int count =0;
-    node **tracer = &data->start;
-    if(!*tracer){
-        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 6");
-    }else {
-        if (count == 3) {
-            count = 0;
-            while (*tracer) {
-                animate(&(*tracer)->item,(*tracer)->item.state);
-                tracer = &(*tracer)->next;
-            }
-
-        }
-        count++;
-    }
-}
-
-/**
- * moves an entity based on velocity
- * @param entity the entity that you want to move
- */
 void moveEntity(GameData *data){
     node **tracer = &data->start;
     if(!*tracer){
@@ -58,8 +24,6 @@ void moveEntity(GameData *data){
         }
     }
 }
-
-
 
 int main(int argc, char **argv) {
     //todo update rendering and inputEvents so that thay pass a ptr not all of gameData
@@ -203,17 +167,16 @@ int main(int argc, char **argv) {
         //creating next frame
         renderMapFromFile(rend,&gameData);
 
-        doorTiggerCollision(&gameData);
+        //doorTiggerCollision(&gameData);
 
-        //renderRoomCode(&gameData,rend,font,color);
+        renderRoomCode(&gameData,rend,font,color);
         //renderTriggerBox(&gameData,rend);
         //renderEntityBoxList(&gameData,rend);
-        //renderWallBox(&gameData,rend);
+        renderWallBox(&gameData,rend);
         //renderBoundingBox(&player->box,rend);
         //SDL_RenderDrawRect(rend,&re);
         renderEntitys(&gameData,rend);
         renderInventory(&gameData,rend);
-;
 
         //present to screee
         SDL_RenderPresent(rend);
