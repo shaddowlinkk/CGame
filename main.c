@@ -1,6 +1,7 @@
 #include "GameCore.h"
 #include "Rendering.h"
 #include "Base_code.h"
+#include "NetCode.h"
 int main(int argc, char **argv) {
     SDL_Init(SDL_INIT_VIDEO);
     unsigned long ids[3];
@@ -16,7 +17,8 @@ int main(int argc, char **argv) {
     //not right
     WaitForSingleObject(data.mainSystem,INFINITE);
     ResetEvent(data.mainSystem);
-    void *main=CreateThread(NULL,0,mainSystem,&data,0,&ids[0]);
+    void *main=CreateThread(NULL,0,mainSystem,&data,0,&ids[1]);
+    CreateThread(NULL,0,runNetCode,&data,0,&ids[2]);
     while (1){
         SetEvent(data.mainSystem);
         Sleep(20);

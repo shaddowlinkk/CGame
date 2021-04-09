@@ -6,5 +6,5 @@
 #define CGAME_NETCODE_H
 #include <windows.h>
 #include "GameCore.h"
-void startServerCon(GameData *data);
+DWORD runNetCode(void *data);
 #endif //CGAME_NETCODE_H
