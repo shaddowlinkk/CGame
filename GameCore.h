@@ -47,9 +47,9 @@ typedef struct _room{
     node *items;
     node *staticBlocks;
     node *mobs;
-    int built;
     struct _room *rooms[4];
     int gened:1;
+    int bound:1;
 }Room;
 
 typedef struct _MapTile{

@@ -2,6 +2,7 @@
 #include "Rendering.h"
 #include "base_code.h"
 int main(int argc, char **argv) {
+    SDL_Init(SDL_INIT_VIDEO);
     unsigned long ids[3];
     SystemData data;
     data.render=NULL;
@@ -18,7 +19,7 @@ int main(int argc, char **argv) {
     void *main=CreateThread(NULL,0,mainSystem,&data,0,&ids[0]);
     while (1){
         SetEvent(data.mainSystem);
-        Sleep(50);
+        Sleep(20);
     }
 
 }

@@ -14,6 +14,7 @@
 #include "Room.h"
 #include "CollisionDetection.h"
 //#define MAX(a,b) (((a) > (b)) ? (a) : (b))
+#define SPEED 2
 
 void moveEntity(GameData *data){
     node **tracer = &data->start;
@@ -21,8 +22,8 @@ void moveEntity(GameData *data){
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 3");
     }else {
         while (*tracer) {
-            (*tracer)->item.sprite.x += (*tracer)->item.velx;
-            (*tracer)->item.sprite.y += (*tracer)->item.vely;
+            (*tracer)->item.sprite.x += (*tracer)->item.velx*SPEED;
+            (*tracer)->item.sprite.y += (*tracer)->item.vely*SPEED;
             setBoundingBox(&(*tracer)->item.box,(*tracer)->item.sprite.x,(*tracer)->item.sprite.y);
             tracer = &(*tracer)->next;
         }
@@ -30,6 +31,7 @@ void moveEntity(GameData *data){
 }
 
 DWORD WINAPI mainSystem(void *vararg) {
+
     SystemData *system=(SystemData *)vararg;
     //todo update rendering and inputEvents so that thay pass a ptr not all of gameData
     srand(time(0));
@@ -111,6 +113,7 @@ DWORD WINAPI mainSystem(void *vararg) {
         running =0;
     }
     SDL_Event event;
+    SetEvent(system->rendering);
     while(running) {
         DWORD wait = WaitForSingleObject(system->mainSystem, INFINITE);
         if (wait==WAIT_OBJECT_0) {
@@ -144,11 +147,11 @@ DWORD WINAPI mainSystem(void *vararg) {
 
                     }
                 }
-                //linkEntityToUserInput(Findnode(&system->gameData->start, 0), system->gameData);
-                //staticObjectCollision(player, system->gameData->currentRoom->staticBlocks);
-                // moveEntity(system->gameData);
+                linkEntityToUserInput(Findnode(&system->gameData->start, 0), system->gameData);
+                doorTiggerCollision(system->gameData);
+                staticObjectCollision(player, system->gameData->currentRoom->staticBlocks);
+                moveEntity(system->gameData);
                 ReleaseMutex(system->LockGameData);
-                SetEvent(system->rendering);
             } else {
                 SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "no mutex");
             }

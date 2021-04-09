@@ -11,7 +11,7 @@ Room *newRoom(unsigned int indor , Room *prevroom){
     INIT_ROOM_ARRAY(new->rooms);
     new->rooms[(indor+2)%4]=prevroom;
     new->mapName="";
-    new->built=0;
+    new->bound=0;
     new->staticBlocks=NULL;
     new->items=NULL;
     new->gened=0;
@@ -60,7 +60,7 @@ Room *initRooms(){
     Room *new;
     new = (Room *) malloc(sizeof(Room));
     INIT_ROOM_PTR(new);
-    new->built=0;
+    new->bound=0;
     new->staticBlocks=NULL;
     new->items=NULL;
     genRoomALL(new);

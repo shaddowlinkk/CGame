@@ -102,20 +102,19 @@ void animateEntitys(SystemData *data){
     static int count =0;
         DWORD wait = WaitForSingleObject(data->LockGameData, 2);
         if (wait==WAIT_OBJECT_0) {
-            count =0;
             node **tracer = &data->gameData->start;
             if (!*tracer) {
                 SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR,
                                "no list data in entity linked list 6");
             } else {
-                //if (count == 3) {
+                if (count == 3) {
                     count = 0;
                     while (*tracer) {
                         animate(&(*tracer)->item, (*tracer)->item.state);
                         tracer = &(*tracer)->next;
                     }
 
-               // }
+                }
                 count++;
             }
             ReleaseMutex(data->LockGameData);
@@ -127,7 +126,6 @@ void animateEntitys(SystemData *data){
 DWORD WINAPI renderingSystem(void *vararg){
     SystemData *system=(SystemData *)vararg;
 
-    SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     SDL_Window *win = SDL_CreateWindow("CGame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (mapsize * 32),
                                        mapsize * 32, SDL_WINDOW_OPENGL);
@@ -153,27 +151,37 @@ DWORD WINAPI renderingSystem(void *vararg){
     }
     TTF_Font * font = TTF_OpenFont("arial.ttf", 25);
     SDL_Color color = { 255, 255, 255 };
+    SDL_Event event;
     SetEvent(system->mainSystem);
     int lvc;
     while (lvc == 0) {
-        if(WaitForSingleObject(system->rendering,INFINITE)==WAIT_OBJECT_0) {
+        if(WaitForSingleObject(system->rendering,0)==WAIT_OBJECT_0) {
+           while (SDL_PollEvent(&event)) {
+               if (event.type == SDL_KEYDOWN) {
+                   if (event.key.keysym.scancode == SDL_SCANCODE_F2) {
+                       system->gameData->inventory.state = ((system->gameData->inventory.state + 1) % 2);
+                   }
+               }
+           }
+/*                if (event.type == SDL_QUIT) {
+                    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "key detected");
+                }*/
             SDL_RenderClear(rend);
             renderMapFromFile(rend,system->gameData);
             renderRoomCode(system->gameData, rend, font, color);
-            //renderTriggerBox(&system->gameData,system->rend);
-            //renderEntityBoxList(&system->gameData,system->rend);
-            renderWallBox(system->gameData, rend);
-            //renderBoundingBox(&player->box,system->rend);
-            //SDL_RenderDrawRect(system->rend,&re);
+            //renderTriggerBox(system->gameData,rend);
+            //renderEntityBoxList(system->gameData,rend);
+            //renderWallBox(system->gameData, rend);
+            //renderBoundingBox(player->box,rend);
             renderEntitys(system->gameData, rend);
             renderInventory(system->gameData, rend);
 
             //present to screee
             SDL_RenderPresent(rend);
             animateEntitys(system);
-            ResetEvent(system->rendering);
+            //ResetEvent(system->rendering);
         }
-        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"rend run");
+
     }
     TTF_CloseFont(font);
     TTF_Quit();

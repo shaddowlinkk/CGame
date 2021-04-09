@@ -42,6 +42,9 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
     unsigned int mask=0x01;
     memset(gameData->triggerList,0,sizeof(gameData->triggerList));
     gameData->triggerCount=0;
+    Entity wall;
+    wall.sprite=ground.tileRect;
+    wall.ID=0;
     for (int y=0;y<size;y++){
         for (int x=0;x<size;x++){
             trigger.Rect.h=32;
@@ -53,14 +56,14 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
             //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"%i",gameData->map[y][x]);
             if(gameData->map[y][x]>=7 && gameData->map[y][x]<=10){
                 //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"????");
-                Entity wall;
                 wall.sprite=ground.tileRect;
                 wall.ID=0;
                 ground.tileRect.h=32;
                 ground.tileRect.w=64;
                 if (gameData->map[y][x]==9 || gameData->map[y][x] ==7){
                     wall.box=initBoundingBox(ground.tileRect.x,ground.tileRect.y,ground.tileRect.h,ground.tileRect.w);
-                    Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
+                    if (gameData->currentRoom->bound==0)
+                        Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
                     trigger.Rect.x=(x*32)+16;
                     trigger.Rect.h=2;
                     if(gameData->map[y][x] ==7&&(gameData->currentRoom->door&(mask<<3))!=0){
@@ -86,7 +89,8 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
 
                 }else{
                     wall.box=initBoundingBox(ground.tileRect.x,ground.tileRect.y,ground.tileRect.h+32,ground.tileRect.w-32);
-                    Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
+                    if (gameData->currentRoom->bound==0)
+                        Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
                     trigger.Rect.y=(y*32)+16;
                     trigger.Rect.h=32;
                     trigger.Rect.w=2;
@@ -116,12 +120,10 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
                         SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[2].tileRect,&ground.tileRect);
                     }
                 }
-            }else if(gameData->map[y][x]==2&&gameData->currentRoom->built==0){
-                Entity wall;
+            }else if((gameData->map[y][x]==2)){
                 wall.box=initBoundingBox(ground.tileRect.x,ground.tileRect.y,ground.tileRect.h,ground.tileRect.w);
-                wall.sprite=ground.tileRect;
-                wall.ID=0;
-                Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
+                if (gameData->currentRoom->bound==0)
+                    Insertnode(&gameData->currentRoom->staticBlocks,NewElement(wall));
                 SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
             }else{
                 SDL_RenderCopy(rend, gameData->GroundSheet, &gameData->Tiles[gameData->map[y][x]].tileRect,&ground.tileRect);
@@ -130,5 +132,6 @@ void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
             ground.tileRect.w=32;
         }
     }
-    gameData->currentRoom->built=1;
+    if (gameData->currentRoom->bound==0)
+            gameData->currentRoom->bound=1;
 }
