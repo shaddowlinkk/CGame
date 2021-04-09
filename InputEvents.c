@@ -15,7 +15,6 @@ int linkEntityToUserInput(Entity *entity, GameData *gameData){
     entity->vely=0;
     entity->velx=0;
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-
     if((state[SDL_SCANCODE_DOWN]||state[SDL_SCANCODE_S])&&(state[SDL_SCANCODE_LEFT]||state[SDL_SCANCODE_A])){
         states=1;
         entity->state=1;

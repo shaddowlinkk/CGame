@@ -42,7 +42,7 @@ int genRoomALL(Room *room){
         *(room->rooms + i) =  newRoom(i, room);
         room->door =0x0f;
     }
-    return 1;
+    return 32;
 }
 int genRoom(Room *room){
 
