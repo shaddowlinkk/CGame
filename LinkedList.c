@@ -61,7 +61,12 @@ void Removenode(node **head, int ID)
         free(old); // free up remainder of list element
     }
 }
-
+/**
+ * finds a node based on id
+ * @param head list to search through
+ * @param ID the id that you want to fine
+ * @return pointer to the found node
+ */
 Entity *Findnode(node **head, int ID)
 {
     BOOL present = FALSE;

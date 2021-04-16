@@ -3,6 +3,12 @@
 //
 
 #include "Room.h"
+/**
+ * creates a new room
+ * @param indor the door entered from
+ * @param prevroom a pointer to the previus room
+ * @return a new room popinter
+ */
 Room *newRoom(unsigned int indor , Room *prevroom){
     Room *new;
     new = (Room *) malloc(sizeof(Room));
@@ -17,6 +23,12 @@ Room *newRoom(unsigned int indor , Room *prevroom){
     new->gened=0;
     return new;
 }
+/**
+ * this function frees rooms that are far from the current room to free memory
+ * @param room the current room
+ * @param depth the depth to free at
+ * @param last the room that you came from
+ */
 void freeRoomsAtDepth(Room *room,int depth,Room *last){
     for (int i = 0; i < 4; ++i) {
         if (room->rooms[i] != NULL && (room->rooms[i] != last)) {
@@ -37,6 +49,11 @@ void freeRoomsAtDepth(Room *room,int depth,Room *last){
         }
     }
 }
+/**
+ * genrates all doors and rooms in a room
+ * @param room the room to gen doors
+ * @return the door room gen not used
+ */
 int genRoomALL(Room *room){
     for(int i=0;i<4;i++) {
         *(room->rooms + i) =  newRoom(i, room);
@@ -44,6 +61,11 @@ int genRoomALL(Room *room){
     }
     return 32;
 }
+/**
+ * this generates whether there is a door
+ * @param room the room that you want to gen
+ * @return the number of doors gened //not used
+ */
 int genRoom(Room *room){
 
     int lvc=(rand()%5);
@@ -56,6 +78,10 @@ int genRoom(Room *room){
     room->gened=1;
     return lvc;
 }
+/**
+ * initializes a room
+ * @return the initalized room
+ */
 Room *initRooms(){
     Room *new;
     new = (Room *) malloc(sizeof(Room));
@@ -66,6 +92,12 @@ Room *initRooms(){
     genRoomALL(new);
     return new;
 }
+/**
+ * enter a door and gens that room
+ * @param door the door that you entered from
+ * @param inRoom the room that you enterd from
+ * @return the room that you ar now in
+ */
 Room *enterRoom(int door,Room *inRoom){
     if(inRoom->rooms[door]->gened==0) {
         genRoom(inRoom->rooms[door]);

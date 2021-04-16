@@ -19,9 +19,11 @@ int main(int argc, char **argv) {
     ResetEvent(data.mainSystem);
     void *main=CreateThread(NULL,0,mainSystem,&data,0,&ids[1]);
     CreateThread(NULL,0,runNetCode,&data,0,&ids[2]);
+    SetEvent(data.systemIO);
     while (1){
         SetEvent(data.mainSystem);
-        Sleep(20);
+        Sleep(100);
+        //Sleep(50);
     }
 
 }

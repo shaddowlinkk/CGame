@@ -6,6 +6,13 @@
 #include <math.h>
 
 // rotates a point around the origine
+/**
+ * this function is used to rotate the a point around a center by a numbe of degree
+ * @param center the point to rotate around
+ * @param point the point that you want to rotate
+ * @param degree the degree amount that you want to rotate
+ * @return the rotated point
+ */
 SDL_Point pointRotation(SDL_Point center,SDL_Point point, int degree) {
     SDL_Point out;
     double corection = M_PI/180;
@@ -13,7 +20,11 @@ SDL_Point pointRotation(SDL_Point center,SDL_Point point, int degree) {
     out.y  = ((point.x-center.x) * sin((degree*corection)))+((point.y-center.y) * cos((degree*corection)))+center.y;
     return out;
 }
-
+/**
+ * This function rotates a boinding box about a point
+ * @param box the bounding boc that you want to rotate around
+ * @param degree the amount that you want to rotate the box around
+ */
 void rotateBoundingBox(BoundingBox *box,int degree){
     box->coords[0]=pointRotation(box->center,box->originCoords[0],degree);
     box->coords[1]=pointRotation(box->center,box->originCoords[1],degree);
@@ -22,7 +33,14 @@ void rotateBoundingBox(BoundingBox *box,int degree){
     box->degree=degree;
 
 }
-
+/**
+ * creates bounding box
+ * @param x x coordinate
+ * @param y y coordinate
+ * @param h height
+ * @param w width
+ * @return a bounding box with specified settings
+ */
 BoundingBox initBoundingBox(int x, int y , int h , int w){
     BoundingBox outBox;
     SDL_Point coord;coord.x=x;coord.y=y;
@@ -42,6 +60,12 @@ BoundingBox initBoundingBox(int x, int y , int h , int w){
     outBox.center=coord;
     return outBox;
 }
+/**
+ * moves a boundingbox in a directions
+ * @param outBox the box to move
+ * @param dx the x velocity
+ * @param dy the y velocity
+ */
 void moveBoundingBox(BoundingBox *outBox,int dx,int dy){
     int h=outBox->h,w=outBox->w;
     outBox->center.x=outBox->coords[0].x+(w/2);
@@ -63,6 +87,12 @@ void moveBoundingBox(BoundingBox *outBox,int dx,int dy){
     outBox->originCoords[3].x+=dx;
     outBox->originCoords[3].y+=dy;
 }
+/**
+ * sets the bounding box  loactions to a x,y location
+ * @param outBox the box to set
+ * @param x the x coordinate
+ * @param y the y corrdinate
+ */
 void setBoundingBox(BoundingBox *outBox,int x,int y){
 
     SDL_Point coord;coord.x=x;coord.y=y;

@@ -29,7 +29,11 @@ void rendermap(SDL_Renderer *rend,GameData *gameData){
         }
     }
 }
-
+/**
+ * this function renders the map from gamedata map data
+ * @param rend SDl_render that you want to render to
+ * @param gameData the game data that you want to read from
+ */
 void renderMapFromFile(SDL_Renderer *rend,GameData *gameData){
     // todo re write to use facade texture
     MapTile ground;

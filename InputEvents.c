@@ -99,6 +99,7 @@ void bindEntityToRect(Entity *entity, SDL_Rect rect){
     if(entity->sprite.y<(rect.y))
         entity->sprite.y=(rect.y)+1;
 }
+///this function has deprecated
 void bindEntitysToBoard(GameData data){
     node **tracer = &data.start;
     if(!*tracer){

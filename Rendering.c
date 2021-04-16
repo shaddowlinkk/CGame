@@ -18,6 +18,30 @@ void renderTriggerBox(GameData *data, SDL_Renderer *rend){
           SDL_RenderDrawRect(rend, &data->triggerList[i].Rect);
     }
 }
+
+#define SPEED 2
+/**
+ * this function moves any entity that has a velocity
+ * @param data the gamedata that you want to run
+ */
+void moveEntity(GameData *data){
+    node **tracer = &data->start;
+    if(!*tracer){
+        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR,"no list data in entity linked list 3");
+    }else {
+        while (*tracer) {
+            (*tracer)->item.sprite.x += (*tracer)->item.velx*SPEED;
+            (*tracer)->item.sprite.y += (*tracer)->item.vely*SPEED;
+            setBoundingBox(&(*tracer)->item.box,(*tracer)->item.sprite.x,(*tracer)->item.sprite.y);
+            tracer = &(*tracer)->next;
+        }
+    }
+}
+/**
+ * renders entitys SDl_rect
+ * @param data the game data that you want to render
+ * @param rend the sdl render whare you want to rendre to
+ */
 void renderEntityBoxList(GameData *data, SDL_Renderer *rend){
     node **tracer = &data->start;
     if(!*tracer){
@@ -29,7 +53,11 @@ void renderEntityBoxList(GameData *data, SDL_Renderer *rend){
         }
     }
 }
-
+/**
+ * renders game data entitys to screen
+ * @param data the game data that you want to render
+ * @param rend the sdl renderer that you want to render to
+ */
 void renderEntitys(GameData *data, SDL_Renderer *rend){
     node **tracer = &data->start;
     if(!*tracer){
@@ -41,6 +69,13 @@ void renderEntitys(GameData *data, SDL_Renderer *rend){
         }
     }
 }
+/**
+ * renders that room code for debug
+ * @param data the game data that you want to render
+ * @param rend the sdl renderer that you want to render to
+ * @param font the font you want to render in
+ * @param color the color that you want to render in
+ */
 void renderRoomCode(GameData *data, SDL_Renderer *rend,TTF_Font *font, SDL_Color color){
     char buffer[100];
     SDL_Surface * surface;
@@ -55,7 +90,11 @@ void renderRoomCode(GameData *data, SDL_Renderer *rend,TTF_Font *font, SDL_Color
     SDL_RenderCopy(rend,texture,NULL,&dstrect);
     SDL_DestroyTexture(texture);
 }
-
+/**
+ * this renders that inventory entity
+ * @param gameData the game data that you want to render
+ * @param rend the sdl renderer that you want to render to
+ */
 void renderInventory(GameData *gameData,SDL_Renderer *rend){
     Entity *player = Findnode(&gameData->start,0);
     if (gameData->inventory.state!=0){
@@ -64,7 +103,11 @@ void renderInventory(GameData *gameData,SDL_Renderer *rend){
         SDL_RenderCopy(rend,gameData->inventory.spriteSheet,&gameData->inventory.cutter,&gameData->inventory.sprite);
     }
 }
-
+/**
+ * renders a bounding box
+ * @param box bounding box that you want to render
+ * @param rend the sdl renderer that you want to render to
+ */
 void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend){
     SDL_Point rect[5];
     rect[0]=box->coords[0];
@@ -78,6 +121,11 @@ void renderBoundingBox(BoundingBox *box , SDL_Renderer *rend){
     SDL_RenderDrawPoint(rend,box->center.x,box->center.y);
     SDL_SetRenderDrawColor(rend, 0xFF, 0xFF, 0xFF, 0xFF);
 }
+/**
+ * rendering all the wall tiles bounding box
+ * @param gameData the game data that you want to render
+ * @param rend the sdl renderer that you want to render to
+ */
 void renderWallBox(GameData *data, SDL_Renderer *rend){
     node **trace = &data->currentRoom->staticBlocks;
     while (*trace){
@@ -96,7 +144,10 @@ void animate(Entity *entity, int state){
     entity->cutter.x = (entity->cutter.w * (((entity->cutter.x / entity->cutter.w)+1)% (entity->animationStates[state]-1)));
 
 }
-
+/**
+ * this function renders all of the entity's animations
+ * @param data the game data that you want to render
+ */
 void animateEntitys(SystemData *data){
     //count slows the animation todo need to remove that and make it native to the rendering loop
     static int count =0;
@@ -119,10 +170,14 @@ void animateEntitys(SystemData *data){
             }
             ReleaseMutex(data->LockGameData);
         }else{
-            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"failed animate");
+            //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO,"failed animate");
         }
 }
-
+/**
+ * this is the rendering thread function
+ * @param vararg this is a system data arg
+ * @return thread return
+ */
 DWORD WINAPI renderingSystem(void *vararg){
     SystemData *system=(SystemData *)vararg;
 
@@ -179,6 +234,10 @@ DWORD WINAPI renderingSystem(void *vararg){
             //present to screee
             SDL_RenderPresent(rend);
             animateEntitys(system);
+            if(WaitForSingleObject(system->LockGameData,0)==WAIT_OBJECT_0) {
+                moveEntity(system->gameData);
+                ReleaseMutex(system->LockGameData);
+            }
             //ResetEvent(system->rendering);
         }
 

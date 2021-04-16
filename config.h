@@ -1,7 +1,7 @@
 //
 // Created by nathan on 10/24/2020.
 //
-
+/// MESSAGE CODES FOR NET CODE
 //MESSAGE CODES
 //common
 #define DISCONNECT 0

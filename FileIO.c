@@ -3,6 +3,11 @@
 //
 
 #include "FileIO.h"
+/**
+ * this functions that save a entitys to a file
+ * @param name file name to save to
+ * @param entity the entity that you want to save
+ */
 void writeEntityToFile(char *name,Entity *entity){
     FILE *player;
     char filepath[31]=".\\entitys\\";
@@ -11,7 +16,12 @@ void writeEntityToFile(char *name,Entity *entity){
     fwrite(entity,sizeof(Entity),1,player);
     fclose(player);
 }
-
+/**
+ * this function read a function into the system
+ * @param name the file name of the entity file
+ * @param rend an SDl_render to make the entity texture data
+ * @return the entity that is read from the file
+ */
 Entity readEntityFromFile(char *name,SDL_Renderer *rend){
     Entity entity;
     FILE *player;
@@ -33,7 +43,12 @@ Entity readEntityFromFile(char *name,SDL_Renderer *rend){
     entity.spriteSheet=tex;
     return entity;
 }
-
+/**
+ * this loads a map into the system
+ * @param name the file name of the map you want to load
+ * @param data pointer to the game data to load map into
+ */
+ /// this function has depricated
 void LoadMapFile(char *name,GameData *data){
     FILE *map;
     map= fopen(name,"rb");
@@ -51,7 +66,12 @@ void LoadMapFile(char *name,GameData *data){
         data->map[(count/(sizeof(*data->map)/4))][(count%(sizeof(*data->map)/4))] += (tmp[0]<<24) | (tmp[1]<<16) | (tmp[2]<<8) | (tmp[3]);
         count++;
     }
-}
+}/**
+ * this loads a map into the system
+ * @param name the file name of the map you want to load
+ * @param data pointer to the game data to load map into
+ */
+ /// reads in a .map file map size 22
 void LoadBigMapFile(char *name,GameData *data){
     FILE *map;
     map= fopen(name,"rb");
@@ -63,6 +83,10 @@ void LoadBigMapFile(char *name,GameData *data){
     }
     fclose(map);
 }
+/**
+ * this loads in all this tile data for the  map
+ * @param data the pointer to game data to load into
+ */
 void LoadTileData(GameData *data){
     FILE *tiles;
     tiles=fopen(".\\entitys\\TileData.dat","r");

@@ -6,9 +6,3 @@
 #include "GameCore.h"
 
 
-void moveToPlayer(Entity mod){
-
-}
-void runAI(){
-
-}

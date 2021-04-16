@@ -61,10 +61,10 @@ int distance(SDL_Point p1, SDL_Point p2){
     return sqrt(pow((p2.x-p1.x),2)+pow((p2.y-p1.y),2));
 }
 /**
- *
- * @param box1 collider
- * @param box2 collide
- * @param dist
+ * a distance optimized  collision detection
+ * @param box1 the bounding box that is is colliding with the second entity(box2)
+ * @param box2 the entity that is being collided with.
+ * @param dist the distance that the  boxes have to have between the to do check for collision
  * @return the collition side on box2
  */
 
@@ -82,7 +82,12 @@ int optCheckCollisions(BoundingBox *box1, BoundingBox *box2,int dist){
     }
     return check;
 }
-
+/**
+ * checks collisions between 2 SDl_Rects
+ * @param a the first rect
+ * @param b the second rect
+ * @return if thare is a collision for not
+ */
 bool checkCollision( SDL_Rect a, SDL_Rect b )
 {
     //The sides of the rectangles

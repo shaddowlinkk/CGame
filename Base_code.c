@@ -14,7 +14,7 @@
 #include "Room.h"
 #include "CollisionDetection.h"
 //#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-#define SPEED 2
+/*#define SPEED 2
 
 void moveEntity(GameData *data){
     node **tracer = &data->start;
@@ -28,8 +28,12 @@ void moveEntity(GameData *data){
             tracer = &(*tracer)->next;
         }
     }
-}
-
+}*/
+/**
+ * this is used the main calculation thread
+ * @param vararg this is a SystemData var
+ * @return the thread returns
+ */
 DWORD WINAPI mainSystem(void *vararg) {
 
     SystemData *system=(SystemData *)vararg;
@@ -83,6 +87,7 @@ DWORD WINAPI mainSystem(void *vararg) {
     writeEntityToFile("player.ent",&ply);
     SDL_FreeSurface(surface);*/
     int running;
+
     Entity *player;
     DWORD wait = WaitForSingleObject(system->LockGameData, 2);
     if (wait==WAIT_OBJECT_0) {
@@ -150,10 +155,10 @@ DWORD WINAPI mainSystem(void *vararg) {
                 linkEntityToUserInput(Findnode(&system->gameData->start, 0), system->gameData);
                 doorTiggerCollision(system->gameData);
                 staticObjectCollision(player, system->gameData->currentRoom->staticBlocks);
-                moveEntity(system->gameData);
+               // moveEntity(system->gameData);
                 ReleaseMutex(system->LockGameData);
             } else {
-                SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "no mutex");
+                //SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "no mutex");
             }
             ResetEvent(system->mainSystem);
         }

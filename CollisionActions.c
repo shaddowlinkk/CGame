@@ -37,7 +37,11 @@ VDL=(VDL∈ℝ|(π/2)<VDL <-( π/2) ⋃ tan(tan(VDL) ≤ 1 )
 */
 
 
-
+/**
+ * stops a moving entity that is colliding with a static entity
+ * @param mover the moving entity that is colliding
+ * @param collision the static entity that is colliding
+ */
 void stopEntityMovement(Entity *mover,Entity *collision){
  double x =(collision->box.center.x-mover->box.center.x),y =(collision->box.center.y-mover->box.center.y);
  y*=-1;

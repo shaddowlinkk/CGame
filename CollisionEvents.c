@@ -10,7 +10,10 @@
 #include "Room.h"
 
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
-
+/**
+ * see if thare is a  collision of one of the trigger areas
+ * @param data a instens of the game data
+ */
 void doorTiggerCollision(GameData *data){
     for (int i = 0; i < data->triggerCount; i++) {
         if(checkCollision(data->triggerList[i].Rect,Findnode(&data->start,0)->sprite)){
@@ -20,7 +23,11 @@ void doorTiggerCollision(GameData *data){
         }
     }
 }
-
+/**
+ * this is function is used to whether an entity is colliding with any entity in a list of entitys
+ * @param entity the entitys that you want to check collisions with
+ * @param list the list of  entitys that you want to check against
+ */
 void staticObjectCollision(Entity *entity, node *list){
     node **tracer= &list;
     if(!*tracer){
